@@ -32,8 +32,8 @@ CREATE TABLE dqm.scenario (
 , expected_command varchar(2000)
 , actual_connection_uid varchar(200)
 , actual_command varchar(2000)
-, failure_record_limit int NULL -- number of success values to preserve
-, success_record_limit int NULL -- number of success values to preserve
+, case_failure_record_limit int NULL -- number of success values to preserve
+, case_success_record_limit int NULL -- number of success values to preserve
 , allowed_case_failure_rate float NOT NULL DEFAULT 0.0  -- number of results allowed to fail
 , active_flag char(1) DEFAULT 'Y' NOT NULL 
 , create_dtm datetime DEFAULT CURRENT_TIMESTAMP
@@ -73,6 +73,8 @@ CREATE TABLE dqm.test (
 , failure_case_ct int
 , success_case_ct int
 , error_flag char(1) -- indicates that there was an execution error
+, test_error_number int
+, test_error_message varchar(2000)
 , expected_error_number int
 , expected_error_message varchar(2000)
 , actual_error_number int

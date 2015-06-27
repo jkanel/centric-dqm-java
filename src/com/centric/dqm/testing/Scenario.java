@@ -25,6 +25,12 @@ public class Scenario {
 	
 	public Exception testException;
 	boolean testFailureFlag = false;
+	
+	public Integer modulus = null;
+	public Integer modularity = null;
+	public Integer caseFailureRecordLimit = null;
+	public Integer caseSuccessRecordLimit = null;
+	public Double allowedCaseFailureRate = null;
 
 	Map<String, TestCase> TestCases = new HashMap<String, TestCase>();
 	
@@ -69,7 +75,7 @@ public class Scenario {
 			this.verifyMetaData(ers.getMetaData(), false);
 			
 			// load expected query results		
-			this.loadComparisons(ers);
+			this.loadComparisons(ers, true);
 			
 			
 		} catch (Exception e) {
@@ -97,7 +103,7 @@ public class Scenario {
 			this.verifyMetaData(ars.getMetaData(), false);
 			
 			// load actual query results		
-			this.loadComparisons(ars);
+			this.loadComparisons(ars, false);
 			
 			
 		} catch (Exception e) {
@@ -152,7 +158,6 @@ public class Scenario {
 					// verify that the column is not a grain column
 					if(this.existsGrainColumn(columnName) == false)
 					{
-						
 	
 						// add to the Measures
 						Measure newMeasure = new Measure(columnName);
@@ -170,16 +175,53 @@ public class Scenario {
 		
 	}
 	
-	public void loadComparisons(ResultSet rs)
+	/**
+	 * Populates grain and measure values from a resultset.
+	 * @param rs Resultset from which values are populated; positioned on the relevant record. 
+	 * @param isExpected Indicates that the resultset is from an expected or actual query.
+	 */
+	public void loadComparisons(ResultSet rs, boolean isExpected) throws SQLException
 	{
-		//loop through the resulset : for each...
+		//loop through the resulset : for each...	
+		String key;
+		TestCase tc = null;
 		
-		// find existing comparison or create new comparison
-		
-		// populate each grain column
-		
-		// populate each measure column
-		
+		while (rs.next()) {
+			
+			// generate the key
+			key = TestCase.generateHashKey(this.BaseTestCase.Grains, rs);
+			
+			// find existing tests case based on grain values;
+			// or create a new test case
+			if(TestCases.containsKey(key)==false)
+			{
+				tc = this.BaseTestCase.cloneDefinition();
+				TestCases.put(key, tc);
+				
+				// populate grain values
+				for(Grain g: tc.Grains)
+				{
+					g.assignValue(rs);
+				}
+			} 
+			else
+			{
+				tc = this.TestCases.get(key);
+			}
+			
+			// populate each measure column
+			for(Measure m: tc.Measures)
+			{
+				if(isExpected == true)
+				{
+					m.assignActualValue(rs);
+				}
+				else
+				{
+					m.assignExpectedValue(rs);
+				}		
+			}
+	    }
 	}
 	
 	/**

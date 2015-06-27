@@ -2,6 +2,8 @@ package com.centric.dqm.testing;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,7 +20,9 @@ public class Measure {
 	protected Double _resultVariance = null;
 	protected Double _resultVarianceRate = null;
 	protected Boolean _isOutOfRange = null;
-		
+	protected boolean _isActualValueAssigned = false;
+	protected boolean _isExpectedValueAssigned = false;
+	
 	public Double actualValueNumeric;
 	public String actualValueText;
 	public Date actualValueDate;
@@ -33,6 +37,73 @@ public class Measure {
 	
 	public Measure(String columnName) {
 		this.columnName = columnName;
+	}
+	
+	public void assignActualValue(ResultSet rs) throws SQLException
+	{
+		if(this._isActualValueAssigned == true)
+		{
+			throw new IllegalStateException("The actual value for " + this.columnName 
+					+ " was already assigned.  This may indicate multiple records having the same grain.");
+		}
+		
+		switch(this.internalDataType)
+		{
+		
+		case TestCase.INTERNAL_DATA_TYPE_NUMERIC:
+		
+			this.actualValueNumeric = rs.getDouble(this.columnName);
+		
+		case TestCase.INTERNAL_DATA_TYPE_INTEGER:
+		
+			this.actualValueInt = rs.getInt(this.columnName);
+		
+		case TestCase.INTERNAL_DATA_TYPE_DATE:
+		
+			this.actualValueDate = rs.getDate(this.columnName);
+		
+		case TestCase.INTERNAL_DATA_TYPE_TEXT:
+		
+			this.actualValueText = rs.getString(columnName);
+				
+		}
+		
+		_isActualValueAssigned = true;
+		
+	}
+	
+	public void assignExpectedValue(ResultSet rs) throws SQLException
+	{
+		
+		if(this._isExpectedValueAssigned == true)
+		{
+			throw new IllegalStateException("The expected value for " + this.columnName 
+					+ " was already assigned.  This may indicate multiple records having the same grain.");
+		}
+		
+		switch(this.internalDataType)
+		{
+		
+		case TestCase.INTERNAL_DATA_TYPE_NUMERIC:
+		
+			this.expectedValueNumeric = rs.getDouble(this.columnName);
+		
+		case TestCase.INTERNAL_DATA_TYPE_INTEGER:
+		
+			this.expectedValueInt = rs.getInt(this.columnName);
+		
+		case TestCase.INTERNAL_DATA_TYPE_DATE:
+		
+			this.expectedValueDate = rs.getDate(this.columnName);
+		
+		case TestCase.INTERNAL_DATA_TYPE_TEXT:
+		
+			this.expectedValueText = rs.getString(columnName);
+				
+		}
+		
+		_isExpectedValueAssigned = true;
+		
 	}
 	
 	public void resetResultVariances()

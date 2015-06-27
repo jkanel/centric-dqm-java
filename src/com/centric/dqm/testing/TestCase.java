@@ -205,25 +205,35 @@ public class TestCase {
 		}
 	}
 	
+	public TestCase cloneDefinition()
+	{
+		TestCase tc = new TestCase();
+		
+		for(Grain g : this.Grains)
+		{
+			tc.Grains.add(g.cloneDefinition());
+		}
+		
+		for(Measure m: this.Measures)
+		{
+			tc.Measures.add(m.cloneDefinition());
+		}
+		
+		return tc;
+	}
+	
 	/**
 	 * Builds the key for use in a hash map.
 	 * @return Returns the hash key string value.
+	 * @throws SQLException 
 	 */
-	public String generateHashKey()
+	public static String generateHashKey(List<Grain> grains, ResultSet rs) throws SQLException
 	{
-		String key = null;
+		String key = "";
 		
-		for(int n = 0; n < this.Grains.size();  n++)
+		for(int n = 0; n < grains.size();  n++)
 		{
-			if(key == null)
-			{
-				key = this.Grains.get(n).toString();
-			}
-			else
-			{
-				key += GRAIN_VALUE_DELIMITER + this.Grains.get(n).toString();
-			}
-			
+			key += rs.getString(grains.get(n).columnName);	
 		}
 		
 		return key;
