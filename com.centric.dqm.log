@@ -1,0 +1,15 @@
+15-06-27 22:51:36.554 [main] INFO - Entering application.
+15-06-27 22:51:36.556 [main] INFO - Interpreting command line parameters.
+15-06-27 22:51:36.556 [main] INFO - Tags: Axxxx
+15-06-27 22:51:36.556 [main] INFO - Scenarios: TEST3,TEST2
+15-06-27 22:51:36.556 [main] INFO - Establishing management database.
+15-06-27 22:51:37.048 [main] INFO - Initiating testing harness.
+15-06-27 22:51:37.080 [main] INFO - Performing tests.
+15-06-27 22:51:37.080 [main] INFO - Identified (1) matching test(s).
+15-06-27 22:51:37.080 [main] INFO - Testing scenario "TEST1" (995b1f74-f3a8-44ad-bfd3-19c350b6aa66).
+15-06-27 22:51:37.441 [main] INFO - Adding "TEST1" measure "order_count"
+15-06-27 22:51:37.441 [main] INFO - Adding "TEST1" measure "sales"
+15-06-27 22:51:37.441 [main] INFO - Adding "TEST1" measure "max_order_number"
+15-06-27 22:51:37.442 [main] INFO - Adding "TEST1" measure "min_order_date"
+15-06-27 22:51:37.773 [main] INFO - Writing test results.
+15-06-27 22:51:37.785 [main] INFO - Exiting application.

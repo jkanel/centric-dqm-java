@@ -18,6 +18,13 @@ public class Grain {
 	
 	protected boolean _isValueAssigned = false;
 	
+	public Grain() {}
+	
+	public Grain(String columnName)
+	{
+		this.columnName = columnName;
+	}
+	
 	public Grain cloneDefinition()
 	{
 		Grain g2 = new Grain();

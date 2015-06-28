@@ -1,16 +1,18 @@
 package com.centric.dqm;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.sql.SQLException;
-
 import com.centric.dqm.data.DataUtils;
 import com.centric.dqm.testing.Harness;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 public class Application {
 	
-	public static void main(String[] args) throws IOException, SQLException
+	public static final Logger logger = LogManager.getLogger();
+	
+	public static void main(String[] args) throws Exception
 	{
 		
     	/*
@@ -18,38 +20,108 @@ public class Application {
     	 * -t "{Tag (String)}"
     	 * -s "{Scenario Identifier (String)}" 
     	 */
+
+		// #################################################
+        logger.info("Entering application.");       
 		
-		
+        // #################################################
+        logger.info("Interpreting command line parameters."); 
     	
     	String tags = null;
     	String scenarioIdentifiers = null;
-    	
-    	for (int n = 0; n < args.length; n++)
+        
+    	try
     	{
+	    	
+	    	for (int n = 0; n < args.length; n++)
+	    	{
+	    		
+	    		if(args[n].equals("-t"))
+	    		{
+	    			tags = args[n+1];
+	    			n++;  // advance the arg counter    			
+	    			
+	    		} else if(args[n].equals("-s"))
+	    		{
+	    			scenarioIdentifiers = args[n+1];
+	    			n++;  // advance the arg counter    		    	
+	    		}    		    		
+	    	}
+	    	
+    	} catch (Exception e)
+    	{
+    		logger.error("Encountered exception.", e);
+    		throw e;
+    	} 
+    	
+    	logger.info("Tags: " + ((tags.length()==0) ? "(not specified)" : tags));
+    	logger.info("Scenarios: " + ((scenarioIdentifiers.length()==0) ? "(not specified)" : scenarioIdentifiers));
+    	
+    	// #################################################
+    	logger.info("Establishing management database.");    	
+    	Configuration config = null;
+    	
+    	try
+    	{
+    		config = new Configuration();
     		
-    		if(args[n].equals("-t"))
-    		{
-    			tags = args[n+1];
-    			n++;  // advance the arg counter    			
-    			
-    		} else if(args[n].equals("-s"))
-    		{
-    			scenarioIdentifiers = args[n+1];
-    			n++;  // advance the arg counter    		    	
-    		}    		    		
+    	} catch(Exception e)
+    	{
+    		logger.error("Encountered exception.", e);
+
+    		throw e;
     	}
-    	    	
-    	Configuration config = new Configuration();
-    	Harness harness = new Harness();
     	
-    	harness.IdentifierList = DataUtils.getListFromString(scenarioIdentifiers);
-    	harness.TagList = DataUtils.getListFromString(tags);
-				    	
-    	config.Connection.readHarness(harness);
+    	// #################################################
+    	logger.info("Initiating testing harness.");    	
+    	Harness harness = null;
     	
-    	harness.perfomTests();
+    	try
+    	{
+
+        	harness = new Harness();
+        	
+        	harness.ScenarioFilterList = DataUtils.getListFromString(scenarioIdentifiers);
+        	harness.TagList = DataUtils.getListFromString(tags);
+    				    	
+        	config.Connection.readHarness(harness);
+    		
+    	} catch(Exception e)
+    	{
+    		logger.error("Encountered exception.", e);
+    		throw e;
+    	}
     	
-    	config.Connection.writeHarness(harness);
+
+    	// #################################################
+    	logger.info("Performing tests.");    	
+    	try
+    	{
+
+    		harness.perfomTests();
+    		
+    	} catch(Exception e)
+    	{
+    		logger.error("Encountered exception.", e);
+    		throw e;
+    	}
+    	
+    	// #################################################
+    	logger.info("Writing test results.");    	
+    	try
+    	{
+
+    		config.Connection.writeHarness(harness);
+    		
+    	} catch(Exception e)
+    	{
+    		logger.error("Encountered exception.", e);
+    		throw e;
+    	}    	
+
+    	
+    	// #################################################
+    	logger.info("Exiting application.");
     	
     	
 	}

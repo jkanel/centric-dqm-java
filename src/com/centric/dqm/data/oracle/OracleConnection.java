@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+
 import com.centric.dqm.data.DataUtils;
 import com.centric.dqm.data.IConnection;
 import com.centric.dqm.data.sqlserver.SqlServerConnection;
@@ -21,6 +22,7 @@ public class OracleConnection implements IConnection  {
 	public String user = null;
 	public String password = null;
 	public String jdbcUrl = null;
+	public int timeout = -1;
 	
 	public OracleConnection(){}
 	
@@ -40,6 +42,11 @@ public class OracleConnection implements IConnection  {
 		this.jdbcUrl = properties.getProperty("url");
 		this.user = properties.getProperty("user");
 		this.password = properties.getProperty("password");
+		
+		if(properties.containsKey("timeout")==true)
+		{
+			this.timeout = Integer.parseInt(properties.getProperty("password"));
+		}
 		
 		// check for missing properties and throw error if needed
 		List<String> errorList = new ArrayList<String>();
@@ -85,6 +92,11 @@ public class OracleConnection implements IConnection  {
 	{
 		return this.password;		
 	}	
+	
+	public int getConnectionTimeout()
+	{
+		return this.timeout;		
+	}
 	
 	public ResultSet executeCommandWithResult(String commandText)
 	{

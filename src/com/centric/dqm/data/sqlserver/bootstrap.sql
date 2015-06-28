@@ -57,7 +57,7 @@ CREATE TABLE dqm.connection (
 , jdbc_url varchar(2000)
 , username varchar(200)
 , password varchar(200)
-, timeout_ms int default 60000
+, timeout_sec int default -1
 , create_dtm datetime DEFAULT CURRENT_TIMESTAMP
 , CONSTRAINT connection_pk PRIMARY KEY (connection_uid)
 )
@@ -69,19 +69,21 @@ CREATE TABLE dqm.test (
 , test_dtm datetime default CURRENT_TIMESTAMP
 , modularity int
 , modulus int
-, failure_flag char(1)
 , failure_case_ct int
 , success_case_ct int
+, failure_flag char(1)
+, allowed_case_failure_rate float
 , error_flag char(1) -- indicates that there was an execution error
-, test_error_number int
 , test_error_message varchar(2000)
-, expected_error_number int
 , expected_error_message varchar(2000)
-, actual_error_number int
 , actual_error_message varchar(2000)
+, test_index int IDENTITY(0,1) not null -- auto incrementing
 , create_dtm datetime DEFAULT CURRENT_TIMESTAMP
 , CONSTRAINT test_pk PRIMARY KEY (test_uid)
 )
+;
+
+CREATE UNIQUE INDEX test_u1 ON dqm.test (test_index)
 ;
 
 

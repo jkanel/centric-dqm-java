@@ -23,28 +23,45 @@ import com.centric.dqm.data.sqlserver.SqlServerConnection;
 public class DataUtils {
 	
 	public static final String BOOTSTRAP_RESOURCE = "bootstrap.sql";
-	public static final String VALIDATE_BOOTSTRAP_RESOURCE = "validate_bootstrap.sql";
-	public static final String GET_SCENARIOS_RESOURCE = "get_scenarios.sql";
-	public static final String GET_SCENARIO_MEASURES_RESOURCE = "get_scenario_measures.sql";
+	public static final String BOOTSTRAP_VALIDATE_RESOURCE = "bootstrap_validate.sql";
+	public static final String SELECT_SCENARIOS_RESOURCE = "select_scenarios.sql";
+	public static final String SELECT_SCENARIO_MEASURES_RESOURCE = "select_scenario_measures.sql";
 	public static final String INSERT_TEST_RESOURCE = "insert_test.sql";
-	public static final String INSERT_TEST_RESULT_RESOURCE = "insert_test_result.sql";
+	public static final String INSERT_TEST_CASE_RESOURCE = "insert_test_case.sql";
 	
 	public static final int MAX_ROWS = 1000;
 	
-	public static Properties getConnectionProperties(String driver, String user, String password, String database, String server, String port, Boolean trusted)
+	public static Properties getConnectionProperties(String url, String user, String password, int timeout)
 	{
 		Properties prop = new Properties();
 		
-		prop.put("driver", driver);
+		prop.put("url", url);
 		prop.put("user", user);
 		prop.put("password", password);
-		prop.put("database", database);
-		prop.put("server", server);
-		prop.put("trusted", Boolean.toString(trusted));
+		prop.put("timeout", String.valueOf(timeout));
 		
 		return prop;
 	}
 	
+	public static String delimitSQLString(String value)
+	{
+		
+		if(value == null)
+		{
+			return "NULL";
+		} else
+		{
+			return "'" + value.replace("'", "''") + "'";
+		}
+	}
+	
+	
+	public static IConnection getConnectionFromDriver(String driver, String url, String user, String password, int timeout)
+	{
+		return DataUtils.getConnectionFromDriver(driver, DataUtils.getConnectionProperties(url, user, password, timeout));
+	}
+	
+
 	public static IConnection getConnectionFromDriver(String driver, Properties properties)
 	{
 		if(SqlServerConnection.JDBC_DRIVER.equals(driver))
@@ -64,7 +81,6 @@ public class DataUtils {
 			throw new IllegalArgumentException("The specified driver \"" + driver + "\" does not correspond to an available database connection.");
 		}
 	}
-
 	
 	public static ResultSet executeCommandWithResult(String commandText, IConnection CurrentConnection)
 	{
@@ -82,12 +98,18 @@ public class DataUtils {
 	       String url = CurrentConnection.getConnectionUrl();
 	       String user = CurrentConnection.getConnectionUser();
 	       String password = CurrentConnection.getConnectionPassword();
-	       
-	       con = DriverManager.getConnection(url, user, password);	    		
+	       	       
+	       con = DriverManager.getConnection(url, user, password);
 	
 	       // Create and execute an SQL statement that returns some data.
 	       stmt = con.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
 	       stmt.setMaxRows(DataUtils.MAX_ROWS);
+	       
+	       // set the query timeout if applicable
+	       if(CurrentConnection.getConnectionTimeout() > 0)
+	       {
+	    	   stmt.setQueryTimeout(CurrentConnection.getConnectionTimeout());
+	       }
 	       
 	       rs = stmt.executeQuery(commandText);
 	       	
@@ -114,7 +136,7 @@ public class DataUtils {
 	    }
 	    catch (SQLException e)
 	    {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}	    
 	    
@@ -125,7 +147,7 @@ public class DataUtils {
 	    	con = stmt.getConnection();
 	    	
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	    
@@ -237,3 +259,6 @@ public class DataUtils {
 	}
 
 }
+
+
+

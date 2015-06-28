@@ -3,13 +3,14 @@ package com.centric.dqm.testing;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.centric.dqm.Application;
 import com.centric.dqm.data.DataUtils;
 
 public class Harness {
 	
 	public List<Scenario> Scenarios = new ArrayList<Scenario>();
 	
-	public List<String> IdentifierList;
+	public List<String> ScenarioFilterList;
 	public List<String> TagList;
 	
 	public void addScenario(Scenario Scenario)
@@ -17,50 +18,32 @@ public class Harness {
 		Scenarios.add(Scenario);
 	}
 	
+	
 	public void perfomTests()
 	{
-		for(Scenario sc : this.Scenarios)
+		List<Scenario> matchScenarioFilterList = this.getMatchScenarios(); 
+		
+		Application.logger.info("Identified (" + matchScenarioFilterList.size() + ") matching test(s).");
+		
+		for(Scenario sc : matchScenarioFilterList)
 		{
 			sc.performTest();
-		}		
-	}
-	
-	public void perfomTests(String scenarioIdentifiers, String tags)
-	{
+		}	
 		
-		if(scenarioIdentifiers.length()>0 || tags.length()>0)
-		{
-			// get Scenario sublist		
-			for(Scenario sc : this.getScenarios(scenarioIdentifiers, tags))
-			{
-				sc.performTest();
-			}			
-		}
-		else
-		{
-			// test all scenarios		
-			for(Scenario sc : this.Scenarios)
-			{
-				sc.performTest();
-			}	
-		}
+		
 	}
 	
-	public List<Scenario> getScenarios(String scenarioIdentifiers, String tags)
+	public List<Scenario> getMatchScenarios()
 	{
 		
 		// if there are no filters then return all scenarios
-		if(scenarioIdentifiers == null && tags == null)
+		if(ScenarioFilterList.size() == 0 || TagList.size() == 0)
 		{
 			return this.Scenarios;
 		}
 						
 		List<Scenario> matchList = new ArrayList<Scenario>();
-		
-		// generate lists
-		List<String> IdentifierList = DataUtils.getListFromString(scenarioIdentifiers);
-		List<String> TagList = DataUtils.getListFromString(tags);
-				
+					
 		boolean includeScenario;
 		
 		for(Scenario sc : this.Scenarios)
@@ -69,7 +52,7 @@ public class Harness {
 			includeScenario = false;
 		
 			// include if the identifier is in the list
-			if(IdentifierList.contains(sc.identifier))
+			if(ScenarioFilterList.contains(sc.identifier))
 			{
 				includeScenario = true;
 			}

@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.centric.dqm.data.DataUtils;
 import com.centric.dqm.data.IConnection;
 
 public class Query {	
@@ -56,11 +57,16 @@ public class Query {
 
 		String value = commandText;
 		
-		value = value.replace(COMMAND_PARAM_CURRENT_TIME, "'" + SdfDatetime.format(currentDate) + "'");		
-		value = value.replace(COMMAND_PARAM_CURRENT_TIME, "'" + SdfDate.format(currentDate) + "'");
-		value = value.replace(COMMAND_PARAM_CURRENT_YEAR, "'" + SdfYear.format(currentDate) + "'");
+		value = value.replace(COMMAND_PARAM_CURRENT_TIME, DataUtils.delimitSQLString(SdfDatetime.format(currentDate)));		
+		value = value.replace(COMMAND_PARAM_CURRENT_TIME,  DataUtils.delimitSQLString(SdfDate.format(currentDate)));
+		value = value.replace(COMMAND_PARAM_CURRENT_YEAR,  SdfYear.format(currentDate));
 		
-		if(modulus != null && modularity != null)
+		if(modulus == null || modularity == null || modulus <= 0 || modularity < 0)
+		{
+			value = value.replace(COMMAND_PARAM_MODULUS, "1");
+			value = value.replace(COMMAND_PARAM_MODULARITY,  "0");
+			
+		} else
 		{
 			value = value.replace(COMMAND_PARAM_MODULUS, String.valueOf(modulus));
 			value = value.replace(COMMAND_PARAM_MODULARITY,  String.valueOf(modularity));

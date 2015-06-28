@@ -4,10 +4,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.centric.dqm.Application;
 import com.centric.dqm.data.DataUtils;
 import com.centric.dqm.data.IConnection;
 
@@ -32,12 +34,16 @@ public class Scenario {
 	public Integer caseSuccessRecordLimit = null;
 	public Double allowedCaseFailureRate = null;
 
-	Map<String, TestCase> TestCases = new HashMap<String, TestCase>();
+	public Map<String, TestCase> TestCases = new HashMap<String, TestCase>();
 	
 	public String identifier;
 	public String description;
 	
-	private String testGuid = null;
+	public String testGuid = null;
+	public Date testDate = null;
+	
+	protected int _successCount = -1;
+	protected int _failureCount = -1;
 	
 	public List<String> Tags = new ArrayList<String>();
 	
@@ -51,6 +57,10 @@ public class Scenario {
 		// assign a test guid
 		this.testGuid = java.util.UUID.randomUUID().toString();
 		
+		// assign the execution time
+		this.testDate = new Date();
+		
+		Application.logger.info("Testing scenario \"" + this.identifier + "\" (" + this.testGuid + ").");
 		
 		// verify that grain columns are less than the maximum allowable
 		if(this.BaseTestCase.Grains.size() > Scenario.MAX_GRAIN_COUNT)
@@ -72,7 +82,7 @@ public class Scenario {
 			
 			// verify expected metadata
 			// the expected query cannot introduce new measure columns
-			this.verifyMetaData(ers.getMetaData(), false);
+			this.verifyMetaData(ers.getMetaData(), true);
 			
 			// load expected query results		
 			this.loadComparisons(ers, true);
@@ -159,6 +169,8 @@ public class Scenario {
 					if(this.existsGrainColumn(columnName) == false)
 					{
 	
+						Application.logger.info("Adding \"" + this.identifier + "\" measure \"" + columnName + "\"");
+						
 						// add to the Measures
 						Measure newMeasure = new Measure(columnName);
 						this.BaseTestCase.Measures.add(newMeasure);
@@ -222,6 +234,40 @@ public class Scenario {
 				}		
 			}
 	    }
+	}
+	
+	protected void updateCounts()
+	{
+
+		this._successCount = 0;
+		this._failureCount = 0;
+		
+		for(String key : this.TestCases.keySet())
+		{
+			this._successCount += this.TestCases.get(key).successCount();
+			this._failureCount += this.TestCases.get(key).failureCount();
+		}
+	}
+	
+	
+	public int successCount()
+	{
+		if(this._successCount == -1)
+		{
+			updateCounts();
+		}
+		
+		return this._successCount;
+	}
+	
+	public int failureCount()
+	{
+		if(this._failureCount == -1)
+		{
+			updateCounts();
+		}
+		
+		return this._failureCount;
 	}
 	
 	/**

@@ -2,6 +2,8 @@ USE [dqm]
 GO
 
 
+
+
 /* ############################################### */
 
 DELETE FROM dqm.connection WHERE connection_uid IN ('AW2012','AWDW2012');
@@ -13,7 +15,7 @@ INSERT INTO [dqm].[connection]
            ,[jdbc_url]
            ,[username]
            ,[password]
-           ,[timeout_ms]
+           ,[timeout_sec]
            ,[create_dtm])
 
 SELECT
@@ -22,7 +24,7 @@ SELECT
 , 'jdbc:sqlserver://localhost;databaseName=AdventureWorks2012' AS [jdbc_url]
 , 'centric' AS [username]
 , 'centric' AS [password]
-, 5000 AS [timeout_ms]
+, 5 AS [timeout_Sec]
 ,CURRENT_TIMESTAMP AS [create_dtm]
 
 UNION ALL
@@ -33,7 +35,7 @@ SELECT
 , 'jdbc:sqlserver://localhost;databaseName=AdventureWorksDW2012' AS [jdbc_url]
 , 'centric' AS [username]
 , 'centric' AS [password]
-, 5000 AS [timeout_ms]
+, 5 AS [timeout_sec]
 ,CURRENT_TIMESTAMP AS [create_dtm]
 
 GO
@@ -47,13 +49,13 @@ DECLARE
   @act VARCHAR(2000) = null
 , @exp VARCHAR(2000) = null;
 
-SET @act = 'SELECT
+SET @exp = 'SELECT
   YEAR(h.OrderDate) AS year
 , MONTH(h.OrderDate) AS month
 , sp.StateProvinceCode AS state
 , COUNT(DISTINCT h.SalesOrderID) AS order_count
 , SUM(d.LineTotal) AS sales
-, SUM(d.LineTotal)*1.0 / COUNT(DISTINCT h.SalesOrderID) AS sales_per_order
+, SUM(d.LineTotal)*1.0 / COUNT(DISTINCT h.SalesOrderID) * 2 AS sales_per_order
 , MAX(h.SalesOrderNumber) AS max_order_number
 , MIN(h.OrderDate) AS min_order_date
 FROM
@@ -64,7 +66,7 @@ INNER JOIN Person.StateProvince sp ON sp.StateProvinceID = a.StateProvinceID
 WHERE
 sp.CountryRegionCode = ''US''
 AND YEAR(h.OrderDate) >= YEAR(CURRENT_TIMESTAMP)-8
-AND Month(h.OrderDate) % 2 = 0
+AND Month(h.OrderDate) % <<MODULUS>> = <<MODULARITY>>
 AND h.OnlineOrderFlag = 1
 GROUP BY
   YEAR(h.OrderDate)
@@ -75,7 +77,7 @@ ORDER BY
 , MONTH(h.OrderDate)
 , sp.StateProvinceCode';
 
-SET @exp = 'SELECT
+SET @act = 'SELECT
 YEAR(s.OrderDate) AS year
 , MONTH(s.OrderDate) AS month
 , g.StateProvinceCode AS state
@@ -92,7 +94,7 @@ INNER JOIN DimGeography g ON g.GeographyKey = c.GeographyKey
 WHERE
 g.CountryRegionCode = ''US''
 AND YEAR(s.OrderDate) >= YEAR(CURRENT_TIMESTAMP)-8
-AND Month(s.OrderDate) % 2 = 0
+AND Month(s.OrderDate) % <<MODULUS>> = <<MODULARITY>>
 GROUP BY
   YEAR(s.OrderDate)
 , MONTH(s.OrderDate)
@@ -140,7 +142,7 @@ GO
 
 /* ############################################### */
 
-DELETE FROM dqm.[scenario_measure] WHERE scenario_uid = ('TEST1') AND measure_name = 'sale_per_order';
+DELETE FROM dqm.[scenario_measure] WHERE scenario_uid = ('TEST1') AND measure_name = 'sales_per_order';
 GO
 
 
@@ -153,7 +155,7 @@ INSERT INTO [dqm].[scenario_measure]
            ,[create_dtm])
 SELECT
 'TEST1' AS [scenario_uid]
-,'sale_per_order' AS [measure_name]
+,'sales_per_order' AS [measure_name]
 ,2 AS [precision]
 ,0.20 AS [allowed_variance]
 ,0.05[allowed_variance_rate]
@@ -230,31 +232,3 @@ ORDER BY
 */
 
 
-SELECT
-  sc.scenario_uid
-, sc.tag_list
-, sc.grain_list
-, sc.modulus
-, sc.expected_connection_uid
-, ec.jdbc_driver as expected_jdbc_driver
-, ec.jdbc_url as expected_jdbc_url
-, ec.username AS expected_username
-, ec.password AS expected_password
-, ec.timeout_ms AS expected_timeout_ms
-, sc.expected_command
-, sc.actual_connection_uid
-, ac.jdbc_driver as actual_jdbc_driver
-, ac.jdbc_url as actual_jdbc_url
-, ac.username AS actual_username
-, ac.password AS actual_password
-, ac.timeout_ms AS actual_timeout_ms
-, sc.actual_command
-, sc.case_failure_record_limit
-, sc.case_success_record_limit
-, sc.allowed_case_failure_rate
-FROM
-dqm.scenario sc
-LEFT JOIN dqm.connection ac ON ac.connection_uid = sc.actual_connection_uid
-LEFT JOIN dqm.connection ec ON ec.connection_uid = sc.expected_connection_uid
-WHERE
-sc.active_flag = 'Y'

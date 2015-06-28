@@ -13,13 +13,14 @@ public interface IConnection {
 	public String getJdbcDriver();
 	public String getConnectionUser();
 	public String getConnectionPassword();
+	public int getConnectionTimeout();
 	
 	public void bootstrap() throws FileNotFoundException, IOException, SQLException;
 	public ResultSet executeCommandWithResult(String commandText);
 	public void executeCommand(String commandText);
 	public void applyProperties(Properties properties);
-	public void readHarness(Harness harness);
-	public void writeHarness(Harness harness);
+	public void readHarness(Harness harness) throws Exception;
+	public void writeHarness(Harness harness) throws Exception;
 	public String getConnectionUrl();
 	
 }
