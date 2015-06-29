@@ -47,18 +47,22 @@ public class Grain {
 			case TestCase.INTERNAL_DATA_TYPE_NUMERIC:
 			
 				this.valueNumeric = rs.getDouble(this.columnName);
+				break;
 			
 			case TestCase.INTERNAL_DATA_TYPE_INTEGER:
 			
 				this.valueInt = rs.getInt(this.columnName);
-			
+				break;
+				
 			case TestCase.INTERNAL_DATA_TYPE_DATE:
 			
 				this.valueDate = rs.getDate(this.columnName);
-			
+				break;
+				
 			case TestCase.INTERNAL_DATA_TYPE_TEXT:
 			
-				this.valueText = rs.getString(columnName);		
+				this.valueText = rs.getString(columnName);
+				break;
 		}
 		
 		this._isValueAssigned = true;
@@ -74,11 +78,12 @@ public class Grain {
 		case TestCase.INTERNAL_DATA_TYPE_NUMERIC:
 		
 			return this.valueNumeric.toString();
+
 		
 		case TestCase.INTERNAL_DATA_TYPE_INTEGER:
 		
 			return this.valueInt.toString();
-		
+
 		case TestCase.INTERNAL_DATA_TYPE_DATE:
 		
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
@@ -87,9 +92,11 @@ public class Grain {
 		case TestCase.INTERNAL_DATA_TYPE_TEXT:
 		
 			return this.valueText;
+			
 		default:
 			
 			return (String)null;
+
 			
 		}
 		

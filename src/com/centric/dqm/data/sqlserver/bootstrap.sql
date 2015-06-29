@@ -32,8 +32,8 @@ CREATE TABLE dqm.scenario (
 , expected_command varchar(2000)
 , actual_connection_uid varchar(200)
 , actual_command varchar(2000)
-, case_failure_record_limit int NULL -- number of success values to preserve
-, case_success_record_limit int NULL -- number of success values to preserve
+, case_failure_record_limit int NOT NULL DEFAULT 100 -- number of success values to preserve
+, case_success_record_limit int NOT NULL DEFAULT 0  -- number of success values to preserve
 , allowed_case_failure_rate float NOT NULL DEFAULT 0.0  -- number of results allowed to fail
 , active_flag char(1) DEFAULT 'Y' NOT NULL 
 , create_dtm datetime DEFAULT CURRENT_TIMESTAMP
@@ -71,8 +71,9 @@ CREATE TABLE dqm.test (
 , modulus int
 , failure_case_ct int
 , success_case_ct int
-, failure_flag char(1)
+, case_failure_rate float
 , allowed_case_failure_rate float
+, failure_flag char(1)
 , error_flag char(1) -- indicates that there was an execution error
 , test_error_message varchar(2000)
 , expected_error_message varchar(2000)
@@ -100,6 +101,7 @@ CREATE TABLE dqm.test_case (
 , allowed_variance float
 , allowed_variance_rate float 
 , failure_flag char(1)
+, grain_hash varchar(2000)
 , grain_01_name varchar(200)
 , grain_01_text varchar(200)
 , grain_02_name varchar(200)

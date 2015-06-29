@@ -27,7 +27,7 @@ public class Query {
 		
 	public ResultSet execute(IConnection connection)
 	{		
-		return this.execute(connection, null, null);
+		return this.execute(connection, 1, 0);
 	}
 	
 	public ResultSet execute (IConnection connection, Integer modulus, Integer modularity)

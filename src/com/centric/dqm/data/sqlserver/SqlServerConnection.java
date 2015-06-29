@@ -14,6 +14,7 @@ import javax.sql.rowset.FilteredRowSet;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.centric.dqm.Application;
 import com.centric.dqm.data.DataUtils;
 import com.centric.dqm.data.IConnection;
 import com.centric.dqm.data.RowsetStringFilter;
@@ -229,32 +230,13 @@ public class SqlServerConnection implements IConnection  {
 		String parameterizedCommandText;
 		
 		commandText = DataUtils.getScriptResource(SqlServerConnection.SCRIPT_RESOURCE_FOLDER, DataUtils.INSERT_TEST_RESOURCE);
-		
-		/*  COLUMN LIST
-		 
-		  [test_uid]
-		, [scenario_uid]
-		, [test_dtm]
-		, [modularity]
-		, [modulus]
-		, [failure_flag]
-		, [allowed_case_failure_rate]
-		, [failure_case_ct]
-		, [success_case_ct]
-		, [error_flag]
-		, [test_error_number]
-		, [test_error_message]
-		, [expected_error_number]
-		, [expected_error_message]
-		, [actual_error_number]
-		, [actual_error_message]
-		, [create_dtm]
-		
-		*/
+
+
+		Application.logger.info("Writing test " + sc.identifier);
 		
 		// prepare calculated parameters
-		int failureCount = sc.failureCount();
-		int successCount = sc.successCount();
+		int failureCount = sc.getFailureCount();
+		int successCount = sc.getSuccessCount();
 		
 		String errorFlag;
 		String failureFlag;
@@ -273,9 +255,9 @@ public class SqlServerConnection implements IConnection  {
 		if(errorFlag == "Y")
 		{
 			// tests with exceptions do not count as failures
-			failureFlag = "N";
+			failureFlag = "Y";
 			
-		} else if (failureCount == 0 && successCount == 0)
+		} else if (failureCount == 0)
 		{			
 			// no case results automatically succeeds
 			failureFlag = "N";
@@ -290,21 +272,48 @@ public class SqlServerConnection implements IConnection  {
 			failureFlag = "N";
 		}
 		
+		
+		/*  COLUMN LIST
+		 
+		  [test_uid]
+		, [scenario_uid]
+		, [test_dtm]
+		
+		, [modularity]
+		, [modulus]
+		
+		, [failure_case_ct]
+		, [success_case_ct]
+		. [case_failure_rate]
+		, [allowed_case_failure_rate]
+		, [failure_flag]
+		
+		, [error_flag]
+		, [test_error_message]
+		, [expected_error_message]
+		, [actual_error_message]
+
+		*/
+		
 		Object[] parameters = {
 				
 		  DataUtils.delimitSQLString(sc.testGuid),
 		  DataUtils.delimitSQLString(sc.identifier),
 		  DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(sc.testDate)),
+		  
 		  String.valueOf(sc.modularity),
 		  String.valueOf(sc.modulus),
-		  DataUtils.delimitSQLString(failureFlag),
+		  
+		  String.valueOf(failureCount),
+		  String.valueOf(successCount),
+		  String.valueOf(sc.getCaseFailureRate()),
 		  String.valueOf(sc.allowedCaseFailureRate),
-		  String.valueOf(sc.failureCount()),
-		  String.valueOf(sc.successCount()),
+		  DataUtils.delimitSQLString(failureFlag),
+
 		  DataUtils.delimitSQLString(errorFlag),
-		  (sc.testException == null) ? "NULL" : DataUtils.delimitSQLString(sc.testException.getMessage()),
-		  (sc.expectedQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(sc.expectedQuery.queryException.getMessage()),
-		  (sc.actualQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(sc.actualQuery.queryException.getMessage())
+		  (sc.testException == null) ? "NULL" : DataUtils.delimitSQLString(Application.getExceptionStackTrace(sc.testException, 2000)),
+		  (sc.expectedQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(Application.getExceptionStackTrace(sc.expectedQuery.queryException, 2000)),
+		  (sc.actualQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(Application.getExceptionStackTrace(sc.actualQuery.queryException,2000))
 		  
 		};
 		
@@ -316,17 +325,174 @@ public class SqlServerConnection implements IConnection  {
 		// execute the command
 		DataUtils.executeCommand(parameterizedCommandText, this);
 		
-		// write the test cases
+		// write the test cases		
+		
+		int successAllowance = sc.caseSuccessRecordLimit;
+		int failureAllowance = sc.caseFailureRecordLimit;
+		TestCase tc;
+		
 		for(String key: sc.TestCases.keySet())
 		{
-			this.writeHarnessTestCase(sc.TestCases.get(key));	
+			tc = sc.TestCases.get(key);
+			
+			// write the test case
+			this.writeHarnessTestCase(sc, tc, failureAllowance, successAllowance);
+			
+			// update counters
+			failureAllowance -= tc.failureCount();
+			successAllowance -= tc.successCount();
+									
+			// if both failure and success record limits are exceeded...
+			if(failureAllowance <= 0 && successAllowance <= 0)
+			{
+				// exit the test case iteration
+				break;
+			}
 		}
 		
 	}
 	
-	public void writeHarnessTestCase(TestCase tc) throws Exception
+	public void writeHarnessTestCase(Scenario sc, TestCase tc, int failureAllowance, int successAllowance) throws Exception
 	{
-		throw new Exception("Start coding here!");
+		String commandText;
+		String parameterizedCommandText;
+		
+		commandText = DataUtils.getScriptResource(SqlServerConnection.SCRIPT_RESOURCE_FOLDER, DataUtils.INSERT_TEST_CASE_RESOURCE);
+	
+		int maxGrainIndex = tc.Grains.size() - 1;
+		
+		String grain01Name = (maxGrainIndex >= 0) ? tc.Grains.get(0).columnName: null;
+		String grain01Text = (maxGrainIndex >= 0) ? tc.Grains.get(0).valueToString(): null;
+		String grain02Name = (maxGrainIndex >= 1) ? tc.Grains.get(1).columnName: null;
+		String grain02Text = (maxGrainIndex >= 1) ? tc.Grains.get(1).valueToString(): null;
+		String grain03Name = (maxGrainIndex >= 2) ? tc.Grains.get(2).columnName: null;
+		String grain03Text = (maxGrainIndex >= 2) ? tc.Grains.get(2).valueToString(): null;
+		String grain04Name = (maxGrainIndex >= 3) ? tc.Grains.get(3).columnName: null;
+		String grain04Text = (maxGrainIndex >= 3) ? tc.Grains.get(3).valueToString(): null;
+		String grain05Name = (maxGrainIndex >= 4) ? tc.Grains.get(4).columnName: null;
+		String grain05Text = (maxGrainIndex >= 4) ? tc.Grains.get(4).valueToString(): null;
+		
+		String failureFlag;
+
+		for(Measure m : tc.Measures)
+		{	
+			
+			// abort writing the test case if both allowances are used
+			if(failureAllowance <= 0 && successAllowance <= 0)
+			{
+				return;
+			}
+						
+			// determine if the measure is failed
+			if(m.isFailed() == true)
+			{
+				
+				// if there is no remaining failure allowance...
+				if(failureAllowance <= 0)
+				{
+					// iterate to the next measure
+					continue;
+				}
+				
+				// set the failure flag
+				failureFlag = "Y";		
+				
+				// decrement the failure allowance by 1
+				failureAllowance--;
+				
+			} else 
+			{
+				// if there is no remaining success allowance...
+				if(successAllowance <= 0)
+				{
+					// iterate to the next measure
+					continue;
+				}
+				
+				// set the failure flag
+				failureFlag = "N";		
+				
+				// decrement the success allowance by 1
+				successAllowance--;
+				
+			}
+			
+			/*  COLUMN LIST
+			 
+			  [test_uid]
+			, [measure_name]
+			, [precision]
+			, [expected_value]
+			, [expected_text]
+			, [actual_value]
+			, [actual_text]
+			, [result_variance]
+			, [result_variance_rate]
+			, [allowed_variance]
+			, [allowed_variance_rate]
+			, [failure_flag]
+			, [grain_hash]
+			, [grain_01_name]
+			, [grain_01_text]
+			, [grain_02_name]
+			, [grain_02_text]
+			, [grain_03_name]
+			, [grain_03_text]
+			, [grain_04_name]
+			, [grain_04_text]
+			, [grain_05_name]
+			, [grain_05_text]
+			
+			*/
+			
+			Object[] parameters = {
+					
+			  DataUtils.delimitSQLString(sc.testGuid),
+			  DataUtils.delimitSQLString(m.columnName),
+			  String.valueOf(m.precision),
+			  
+			  (m.isNumeric() ? m.expectedValueToString() : "NULL"),
+			  DataUtils.delimitSQLString((!m.isNumeric() ? m.expectedValueToString() : null)),
+			  
+			  (m.isNumeric() ? m.actualValueToString() : "NULL"),
+			  DataUtils.delimitSQLString((!m.isNumeric() ? m.actualValueToString() : null)),
+			  
+			  String.valueOf(m.getVariance()),
+			  String.valueOf(m.getVarianceRate()),
+			  
+			  String.valueOf(m.allowedVariance),
+			  String.valueOf(m.allowedVarianceRate),
+			  
+			  DataUtils.delimitSQLString(failureFlag),
+			  
+			  DataUtils.delimitSQLString(tc.hashKey),
+			  
+			  DataUtils.delimitSQLString(grain01Name),
+			  DataUtils.delimitSQLString(grain01Text),
+			  
+			  DataUtils.delimitSQLString(grain02Name),
+			  DataUtils.delimitSQLString(grain02Text),
+
+			  DataUtils.delimitSQLString(grain03Name),
+			  DataUtils.delimitSQLString(grain03Text),
+			  
+			  DataUtils.delimitSQLString(grain04Name),
+			  DataUtils.delimitSQLString(grain04Text),
+			  
+			  DataUtils.delimitSQLString(grain05Name),
+			  DataUtils.delimitSQLString(grain05Text),
+			  
+			};
+			
+			// apply the values to the command text
+			MessageFormat mf = new MessageFormat(commandText);
+			
+			parameterizedCommandText = mf.format(parameters);
+					
+			// execute the command
+			DataUtils.executeCommand(parameterizedCommandText, this);
+		
+		}
 	}
 	
 	public void bootstrap() throws FileNotFoundException, IOException, SQLException

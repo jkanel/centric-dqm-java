@@ -8,8 +8,9 @@ import java.util.List;
 
 public class TestCase {
 	
-	public final static String GRAIN_VALUE_DELIMITER = "";
+	public final static String GRAIN_VALUE_DELIMITER = "#";
 	
+	public final static int INTERNAL_DATA_TYPE_UNKNOWN = 0;	
 	public final static int INTERNAL_DATA_TYPE_INTEGER = 1;	
 	public final static int INTERNAL_DATA_TYPE_NUMERIC = 2;
 	public final static int INTERNAL_DATA_TYPE_DATE = 3;
@@ -24,6 +25,8 @@ public class TestCase {
 	protected int _successCount = -1;
 	protected int _failureCount = -1;
 	
+	public String hashKey;
+	
 	protected void updateCounts()
 	{
 
@@ -35,6 +38,11 @@ public class TestCase {
 			this._successCount += m.successCount();
 			this._failureCount += m.failureCount();
 		}
+	}
+	
+	public boolean isFailed()
+	{
+		return (this.failureCount() > 0);
 	}
 	
 	
@@ -190,7 +198,7 @@ public class TestCase {
 		case java.sql.Types.TIME: 
 		case java.sql.Types.TIMESTAMP:
 			
-			return TestCase.INTERNAL_DATA_TYPE_INTEGER;
+			return TestCase.INTERNAL_DATA_TYPE_DATE;
 			
 		case java.sql.Types.VARCHAR: 
 		case java.sql.Types.CHAR: 
@@ -229,16 +237,26 @@ public class TestCase {
 	 */
 	public static String generateHashKey(List<Grain> grains, ResultSet rs) throws SQLException
 	{
-		String key = "";
+		String key = null;
 		
 		for(int n = 0; n < grains.size();  n++)
 		{
-			key += rs.getString(grains.get(n).columnName);	
+			
+			if(key == null)
+			{
+				key = rs.getString(grains.get(n).columnName).trim();
+			} else
+			{
+				key += TestCase.GRAIN_VALUE_DELIMITER + rs.getString(grains.get(n).columnName).trim();
+			}
+			
 		}
 		
 		return key;
 		
 	}
+	
+
 
 	
 

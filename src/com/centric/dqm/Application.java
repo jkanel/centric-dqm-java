@@ -1,7 +1,10 @@
 package com.centric.dqm;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+
 import com.centric.dqm.data.DataUtils;
 import com.centric.dqm.testing.Harness;
 
@@ -22,7 +25,7 @@ public class Application {
     	 */
 
 		// #################################################
-        logger.info("Entering application.");       
+        logger.info("Entering application.");
 		
         // #################################################
         logger.info("Interpreting command line parameters."); 
@@ -132,6 +135,31 @@ public class Application {
 		String decodedPath = URLDecoder.decode(path, "UTF-8");
 		
 		return decodedPath;
+	}
+	
+	public static String getExceptionStackTrace(Exception ex)
+	{
+		return Application.getExceptionStackTrace(ex, 0);
+	}
+	
+	public static String getExceptionStackTrace(Exception ex, int maxLength)
+	{
+		StringWriter trace = new StringWriter();
+		ex.printStackTrace(new PrintWriter(trace));
+		
+		if(maxLength > trace.toString().length())
+		{
+			maxLength = trace.toString().length();
+		}
+		
+		if(maxLength == 0)
+		{
+			return trace.toString();	
+		} else
+		{
+			return trace.toString().substring(0, maxLength - 1);
+		}
+		
 	}
 	    
 }

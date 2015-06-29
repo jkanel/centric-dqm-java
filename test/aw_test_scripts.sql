@@ -54,8 +54,8 @@ SET @exp = 'SELECT
 , MONTH(h.OrderDate) AS month
 , sp.StateProvinceCode AS state
 , COUNT(DISTINCT h.SalesOrderID) AS order_count
-, SUM(d.LineTotal) AS sales
-, SUM(d.LineTotal)*1.0 / COUNT(DISTINCT h.SalesOrderID) * 2 AS sales_per_order
+, SUM(d.LineTotal) * 1.2 AS sales
+, SUM(d.LineTotal)*1.0 / COUNT(DISTINCT h.SalesOrderID) AS sales_per_order
 , MAX(h.SalesOrderNumber) AS max_order_number
 , MIN(h.OrderDate) AS min_order_date
 FROM
@@ -130,8 +130,8 @@ SELECT
 , @exp AS [expected_command]
 , 'AWDW2012' AS [actual_connection_uid]
 , @act AS [actual_command]
-,6 AS [case_failure_record_limit]
-,4 AS [case_success_record_limit]
+, 1000 AS [case_failure_record_limit]
+, 20 AS [case_success_record_limit]
 ,0.05 AS [allowed_case_failure_rate]
 ,'Y' AS [active_flag]
 ,CURRENT_TIMESTAMP AS [create_dtm]
@@ -232,3 +232,6 @@ ORDER BY
 */
 
 
+
+truncate table dqm.test
+truncate table dqm.test_case

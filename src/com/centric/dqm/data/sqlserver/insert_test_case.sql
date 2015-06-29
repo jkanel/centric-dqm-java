@@ -11,6 +11,7 @@ INSERT INTO [dqm].[test_case] (
 , [allowed_variance]
 , [allowed_variance_rate]
 , [failure_flag]
+, [grain_hash]
 , [grain_01_name]
 , [grain_01_text]
 , [grain_02_name]
@@ -47,6 +48,7 @@ VALUES
 , {19}
 , {20}
 , {21}
+, {22}
 , CURRENT_TIMESTAMP
 )
 ;

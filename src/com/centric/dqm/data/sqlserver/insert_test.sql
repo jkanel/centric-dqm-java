@@ -4,10 +4,11 @@ INSERT INTO [dqm].[test] (
 , [test_dtm]
 , [modularity]
 , [modulus]
-, [failure_flag]
-, [allowed_case_failure_rate]
 , [failure_case_ct]
 , [success_case_ct]
+, [case_failure_rate]
+, [allowed_case_failure_rate]
+, [failure_flag]
 , [error_flag]
 , [test_error_message]
 , [expected_error_message]
@@ -29,6 +30,7 @@ VALUES
 , {10}
 , {11}
 , {12}
+, {13}
 , CURRENT_TIMESTAMP
 )
 ;

@@ -236,6 +236,7 @@ public class DataUtils {
 	public static String getScriptResource(String resourceFolder, String resourceName) throws FileNotFoundException, IOException
 	{
 		
+		// the resource folder is the relative to the DataUtils package folder path
 		String resourcePath = resourceFolder + "/" + resourceName;
 			
 		InputStream in = DataUtils.class.getResourceAsStream(resourcePath);

@@ -78,7 +78,7 @@ public class Scenario {
 		try {
 			
 			// run the expected query
-			ers = expectedQuery.execute(expectedConnection);
+			ers = expectedQuery.execute(expectedConnection, this.modulus, this.modularity);
 			
 			// verify expected metadata
 			// the expected query cannot introduce new measure columns
@@ -106,7 +106,7 @@ public class Scenario {
 		try {
 			
 			// run the actual query
-			ars = actualQuery.execute(actualConnection);
+			ars = actualQuery.execute(actualConnection, this.modulus, this.modularity);
 			
 			// verify actual metadata
 			// the actual query cannot introduce new measure columns
@@ -126,6 +126,8 @@ public class Scenario {
 			// dispose of the resultset
 			DataUtils.disposeResulset(ars);			
 		}
+		
+		ars = null;
 
 
 
@@ -135,13 +137,12 @@ public class Scenario {
 	 * Ensures all grain and measure in the base comparison
 	 * also exist in this comparison object instance.
 	 * @param BaseTestCase The comparison used as a reference.
-	 * @throws SQLException 
 	 * @throws Exception 
 	 */
-	public void verifyMetaData(ResultSetMetaData md, boolean allowNewMeasures) throws SQLException
+	public void verifyMetaData(ResultSetMetaData md, boolean isExpected) throws Exception
 	{
 		String columnName;
-
+		int mdInternalDataType;
 
 		// validate that the grain column name exists in the metadata
 		// this is a requirement for both expected and actual queries
@@ -149,33 +150,81 @@ public class Scenario {
 		{
 			if(this.existsMetaDataColumn(g.columnName, md) == false)
 			{
-				throw new IllegalStateException("The specified query does not contain a required grain column, \"" + g.columnName + "\".");
+				throw new IllegalStateException("The specified query does not contain a required grain column, \"" 
+						+ g.columnName + "\".");
 			}
+			
+			mdInternalDataType = TestCase.getComparisonDataType(this.getMetaDataColumnType(g.columnName, md));
+			
+			// set the data type if unknown
+			if(g.internalDataType == TestCase.INTERNAL_DATA_TYPE_UNKNOWN)
+			{
+				g.internalDataType = mdInternalDataType;
+				
+			// if metadata data type is different than the previously set
+			// data type, throw an exception
+			} else if (g.internalDataType != mdInternalDataType)
+			{
+				throw new IllegalStateException("The data type of the grain column, \"" 
+						+ g.columnName + "\" is not compatible across queries.");
+			}
+			
 		}
 		
 		
 		// add new measure columns if warranted
-		if(allowNewMeasures == true)
+		for(int n = 1; n <= md.getColumnCount(); n++)
 		{
 			
-			for(int n = 1; n <= md.getColumnCount(); n++)
+			columnName = md.getColumnLabel(n);			
+			
+			// get the internal data type indicated by metadata
+			mdInternalDataType = TestCase.getComparisonDataType(md.getColumnType(n));
+			
+			// get the existing measure				
+			Measure m = this.getMeasureByColumn(columnName);
+			
+			// validate the existing measure data type for the actual metadata
+			if(isExpected == false)
 			{
-				// capture the column name to find
-				columnName = md.getColumnLabel(n);
+
+				// if the measure exist; and data types are different 
+				// than metadata, throw an exception
+				if(m != null && m.internalDataType != mdInternalDataType)
+				{
+					throw new IllegalStateException("The data type of the comparison column, \"" 
+							+ columnName + "\" is not compatible across queries.");
+				}
 				
-				if(this.existsMeasureColumn(columnName) == false)		
+			// enrich and add measures for expected metadata
+			} else
+			{
+				
+				// if the measure exists 
+				if(m != null)
+				{
+					// set the internal data type
+					m.internalDataType = mdInternalDataType;
+					
+				// if the measure is new (does not exist)
+				} else
 				{				
-					// verify that the column is not a grain column
+					// preparing to add a new measure
+					// if the column is not a grain column
 					if(this.existsGrainColumn(columnName) == false)
 					{
 	
-						Application.logger.info("Adding \"" + this.identifier + "\" measure \"" + columnName + "\"");
+						Application.logger.info("Adding \"" + this.identifier + "\" metadata \"" + columnName + "\".");
 						
 						// add to the Measures
 						Measure newMeasure = new Measure(columnName);
+						newMeasure.internalDataType = mdInternalDataType;
+						
 						this.BaseTestCase.Measures.add(newMeasure);
 											
-						// force add to the existing Comparison measures
+						// force add to the existing test case measures
+						// this code should not generally be exercised
+						// if expected metadata is treated prior to actual metadata
 						for(String key: this.TestCases.keySet())
 						{
 							TestCases.get(key).Measures.add(newMeasure.cloneDefinition());
@@ -195,30 +244,34 @@ public class Scenario {
 	public void loadComparisons(ResultSet rs, boolean isExpected) throws SQLException
 	{
 		//loop through the resulset : for each...	
-		String key;
 		TestCase tc = null;
 		
 		while (rs.next()) {
 			
 			// generate the key
-			key = TestCase.generateHashKey(this.BaseTestCase.Grains, rs);
+			String hashKey = TestCase.generateHashKey(this.BaseTestCase.Grains, rs);
 			
-			// find existing tests case based on grain values;
-			// or create a new test case
-			if(TestCases.containsKey(key)==false)
+			tc = this.TestCases.get((String)hashKey);
+			
+			// if the test case does not exist
+			if(tc == null)
 			{
+				// clone the base test case
 				tc = this.BaseTestCase.cloneDefinition();
-				TestCases.put(key, tc);
 				
-				// populate grain values
+				// assign the hash key
+				tc.hashKey = hashKey;
+				
+				// add to the test cases
+				TestCases.put(hashKey, tc);
+				
+				// populate test case grain values
 				for(Grain g: tc.Grains)
 				{
 					g.assignValue(rs);
 				}
-			} 
-			else
-			{
-				tc = this.TestCases.get(key);
+				
+	        // otherwise retrieve the existing test case
 			}
 			
 			// populate each measure column
@@ -250,7 +303,7 @@ public class Scenario {
 	}
 	
 	
-	public int successCount()
+	public int getSuccessCount()
 	{
 		if(this._successCount == -1)
 		{
@@ -260,7 +313,7 @@ public class Scenario {
 		return this._successCount;
 	}
 	
-	public int failureCount()
+	public int getFailureCount()
 	{
 		if(this._failureCount == -1)
 		{
@@ -268,6 +321,23 @@ public class Scenario {
 		}
 		
 		return this._failureCount;
+	}
+	
+	public Double getCaseFailureRate()
+	{
+		
+		int failureCount = this.getFailureCount();
+		int totalCount = failureCount + this.getSuccessCount();
+		
+		if(totalCount == 0)
+		{
+			return 0.0d;
+			
+		} else
+		{
+			Double x =  (double)failureCount *  1.000 / (double)totalCount;
+			return x;
+		}
 	}
 	
 	/**
@@ -286,6 +356,34 @@ public class Scenario {
 		}
 		
 		return false;		
+	}
+	
+	Grain getGrainByColumn(String columnName)
+	{
+		for(Grain m : this.BaseTestCase.Grains)			
+		{
+			if(m.columnName.equals(columnName))
+			{
+				return m;
+			}			
+		}
+		
+		return null;		
+	}
+	
+	
+	
+	Measure getMeasureByColumn(String columnName)
+	{
+		for(Measure m : this.BaseTestCase.Measures)			
+		{
+			if(m.columnName.equals(columnName))
+			{
+				return m;
+			}			
+		}
+		
+		return null;		
 	}
 	
 	/**
@@ -345,6 +443,34 @@ public class Scenario {
 		}
 		
 		return false;
+	}
+	
+	int getMetaDataColumnType(String columnName, ResultSetMetaData md) throws SQLException
+	{
+		int columnIndex;
+		
+		for(columnIndex = 1; columnIndex <= md.getColumnCount(); columnIndex++)
+		{
+			if(md.getColumnLabel(columnIndex).equals(columnName))
+			{
+				return md.getColumnType(columnIndex);
+			}
+		}
+		
+		return -1;
 	}	
 
+	String getKeyFromTestCases(String value)
+	{
+		for(String key : this.TestCases.keySet())
+		{
+			if (key.equalsIgnoreCase(value))
+			{
+				return key;
+			}
+		}
+		
+		return null;
+	}
+	
 }

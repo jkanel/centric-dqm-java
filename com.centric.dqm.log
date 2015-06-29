@@ -1,15 +1,16 @@
-15-06-27 22:51:36.554 [main] INFO - Entering application.
-15-06-27 22:51:36.556 [main] INFO - Interpreting command line parameters.
-15-06-27 22:51:36.556 [main] INFO - Tags: Axxxx
-15-06-27 22:51:36.556 [main] INFO - Scenarios: TEST3,TEST2
-15-06-27 22:51:36.556 [main] INFO - Establishing management database.
-15-06-27 22:51:37.048 [main] INFO - Initiating testing harness.
-15-06-27 22:51:37.080 [main] INFO - Performing tests.
-15-06-27 22:51:37.080 [main] INFO - Identified (1) matching test(s).
-15-06-27 22:51:37.080 [main] INFO - Testing scenario "TEST1" (995b1f74-f3a8-44ad-bfd3-19c350b6aa66).
-15-06-27 22:51:37.441 [main] INFO - Adding "TEST1" measure "order_count"
-15-06-27 22:51:37.441 [main] INFO - Adding "TEST1" measure "sales"
-15-06-27 22:51:37.441 [main] INFO - Adding "TEST1" measure "max_order_number"
-15-06-27 22:51:37.442 [main] INFO - Adding "TEST1" measure "min_order_date"
-15-06-27 22:51:37.773 [main] INFO - Writing test results.
-15-06-27 22:51:37.785 [main] INFO - Exiting application.
+15-06-28 20:41:52.122 [main] main Entering application.
+15-06-28 20:41:52.124 [main] main Interpreting command line parameters.
+15-06-28 20:41:52.124 [main] main Tags: Axxxx
+15-06-28 20:41:52.124 [main] main Scenarios: TEST3,TEST2
+15-06-28 20:41:52.124 [main] main Establishing management database.
+15-06-28 20:41:52.619 [main] main Initiating testing harness.
+15-06-28 20:41:52.671 [main] main Performing tests.
+15-06-28 20:41:52.671 [main] perfomTests Identified (1) matching test(s).
+15-06-28 20:41:52.671 [main] performTest Testing scenario "TEST1" (aa0a2760-9b82-4446-8e0f-474387e21713).
+15-06-28 20:41:52.790 [main] verifyMetaData Adding "TEST1" metadata "order_count".
+15-06-28 20:41:52.790 [main] verifyMetaData Adding "TEST1" metadata "sales".
+15-06-28 20:41:52.790 [main] verifyMetaData Adding "TEST1" metadata "max_order_number".
+15-06-28 20:41:52.790 [main] verifyMetaData Adding "TEST1" metadata "min_order_date".
+15-06-28 20:41:52.944 [main] main Writing test results.
+15-06-28 20:41:52.946 [main] writeHarnessTest Writing test TEST1
+15-06-28 20:41:53.379 [main] main Exiting application.
