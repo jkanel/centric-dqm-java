@@ -65,25 +65,10 @@ EXISTS (
 ;
 
 
+
 select * from dqm.test order by test_index desc
 
 -- truncate table dqm.test_case
 select * from dqm.test_case
-where test_uid = '4c70b268-eb48-4216-a0d1-376dfc038c32'
-order by create_dtm desc
-
-com.microsoft.sqlserver.jdbc.SQLServerException: The conversion from datetime to INTEGER is unsupported.
-	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDriverError(SQLServerException.java:190)
-	at com.microsoft.sqlserver.jdbc.DataTypes.throwConversionError(DataTypes.java:1117)
-	at com.microsoft.sqlserver.jdbc.ServerDTVImpl.getValue(dtv.java:2481)
-	at com.microsoft.sqlserver.jdbc.DTV.getValue(dtv.java:193)
-	at com.microsoft.sqlserver.jdbc.Column.getValue(Column.java:132)
-	at com.microsoft.sqlserver.jdbc.SQLServerResultSet.getValue(SQLServerResultSet.java:2082)
-	at com.microsoft.sqlserver.jdbc.SQLServerResultSet.getValue(SQLServerResultSet.java:2067)
-	at com.microsoft.sqlserver.jdbc.SQLServerResultSet.getInt(SQLServerResultSet.java:2319)
-	at com.centric.dqm.testing.Measure.assignExpectedValue(Measure.java:118)
-	at com.centric.dqm.testing.Scenario.loadComparisons(Scenario.java:288)
-	at com.centric.dqm.testing.Scenario.performTest(Scenario.java:116)
-	at com.centric.dqm.testing.Harness.perfomTests(Harness.java:30)
-	at com.centric.dqm.Application.main(Application.java:104)
+
 

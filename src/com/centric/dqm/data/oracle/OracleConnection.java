@@ -10,8 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.centric.dqm.data.DataUtils;
 import com.centric.dqm.data.IConnection;
-import com.centric.dqm.data.sqlserver.SqlServerConnection;
-import com.centric.dqm.testing.Harness;
 
 
 public class OracleConnection implements IConnection  {
@@ -36,6 +34,12 @@ public class OracleConnection implements IConnection  {
 		applyProperties(properties);
 	}
 
+	
+	
+	public String getScriptResourceFolder()
+	{
+		return OracleConnection.SCRIPT_RESOURCE_FOLDER;
+	}
 	
 	public void applyProperties(Properties properties)
 	{
@@ -80,7 +84,7 @@ public class OracleConnection implements IConnection  {
 
 
 	public String getJdbcDriver(){
-		return SqlServerConnection.JDBC_DRIVER;
+		return OracleConnection.JDBC_DRIVER;
 	}
 	
 	public String getConnectionUser()
@@ -108,21 +112,4 @@ public class OracleConnection implements IConnection  {
 	    DataUtils.executeCommand(commandText, this);	    
 	}
 	
-	
-	public void readHarness(Harness harness)
-	{
-		
-	}
-	
-	public void writeHarness(Harness harness)
-	{
-		
-	}
-	
-	public void bootstrap()
-	{
-		
-	}
-
-
 }

@@ -5,7 +5,10 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import com.centric.dqm.data.Bootstrapper;
 import com.centric.dqm.data.DataUtils;
+import com.centric.dqm.data.HarnessReader;
+import com.centric.dqm.data.HarnessWriter;
 import com.centric.dqm.testing.Harness;
 
 import org.apache.logging.log4j.Logger;
@@ -25,10 +28,10 @@ public class Application {
     	 */
 
 		// #################################################
-        logger.info("Entering application.");
+        logger.info("Entering application");
 		
         // #################################################
-        logger.info("Interpreting command line parameters."); 
+        logger.info("Interpreting command line parameters"); 
     	
     	String tags = null;
     	String scenarioIdentifiers = null;
@@ -67,6 +70,7 @@ public class Application {
     	try
     	{
     		config = new Configuration();
+    		Bootstrapper.assertBootstrap(config.Connection);
     		
     	} catch(Exception e)
     	{
@@ -76,7 +80,7 @@ public class Application {
     	}
     	
     	// #################################################
-    	logger.info("Initiating testing harness.");    	
+    	logger.info("Initiating testing harness");    	
     	Harness harness = null;
     	
     	try
@@ -86,8 +90,8 @@ public class Application {
         	
         	harness.ScenarioFilterList = DataUtils.getListFromString(scenarioIdentifiers);
         	harness.TagList = DataUtils.getListFromString(tags);
-    				    	
-        	config.Connection.readHarness(harness);
+    		
+        	HarnessReader.readHarness(config.Connection, harness);
     		
     	} catch(Exception e)
     	{
@@ -97,7 +101,7 @@ public class Application {
     	
 
     	// #################################################
-    	logger.info("Performing tests.");    	
+    	logger.info("Performing tests");    	
     	try
     	{
 
@@ -110,11 +114,11 @@ public class Application {
     	}
     	
     	// #################################################
-    	logger.info("Writing test results.");    	
+	
     	try
     	{
 
-    		config.Connection.writeHarness(harness);
+    		HarnessWriter.writeHarness(config.Connection, harness);
     		
     	} catch(Exception e)
     	{

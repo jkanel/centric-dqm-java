@@ -31,7 +31,6 @@ public class Configuration {
 	/**
 	 * Reads the configuration file (Configuration.CONFIG_FILENAME)
 	 * and establishes a connection to the Data Quality Monitoring database.
-	 * The database will be bootstrapped if the correct schema does not already exist.
 	 * @throws SQLException 
 	*/
 	public void readConfiguration() throws IOException, SQLException {
@@ -52,8 +51,7 @@ public class Configuration {
 		// compare the driver with connection drivers	
 		String driver = prop.getProperty("driver");
 		
-		Connection = DataUtils.getConnectionFromDriver(driver, prop);		
-		Connection.bootstrap();
+		this.Connection = DataUtils.getConnectionFromDriver(driver, prop);		
 	}	
 		
 	

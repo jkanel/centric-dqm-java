@@ -40,6 +40,7 @@ SELECT
 
 GO
 
+
 /* ############################################### */
 
 DELETE FROM dqm.scenario WHERE scenario_uid IN ('TEST1');
@@ -49,7 +50,10 @@ DECLARE
   @act VARCHAR(2000) = null
 , @exp VARCHAR(2000) = null;
 
-SET @exp = 'SELECT
+SET @exp = 'dbo.dqm_test @modulus=<<MODULUS>>, @modularity=<<MODULARITY>>;'
+
+/*
+'SELECT
   YEAR(h.OrderDate) AS year
 , MONTH(h.OrderDate) AS month
 , sp.StateProvinceCode AS state
@@ -76,6 +80,7 @@ ORDER BY
   YEAR(h.OrderDate)
 , MONTH(h.OrderDate)
 , sp.StateProvinceCode';
+*/
 
 SET @act = 'SELECT
 YEAR(s.OrderDate) AS year
@@ -121,7 +126,7 @@ INSERT INTO [dqm].[scenario]
            ,[create_dtm])
 
 SELECT
-'TEST1' AS [scenario_uid]
+  'TEST1' AS [scenario_uid]
 , 'Test 1' AS [scenario_desc]
 , 'Axxxx,Bxxxx' AS [tag_list]
 , 'year,month,state' AS [grain_list]
@@ -131,10 +136,10 @@ SELECT
 , 'AWDW2012' AS [actual_connection_uid]
 , @act AS [actual_command]
 , 1000 AS [case_failure_record_limit]
-, 20 AS [case_success_record_limit]
-,0.05 AS [allowed_case_failure_rate]
-,'Y' AS [active_flag]
-,CURRENT_TIMESTAMP AS [create_dtm]
+, 0 AS [case_success_record_limit]
+, 0.05 AS [allowed_case_failure_rate]
+, 'Y' AS [active_flag]
+, CURRENT_TIMESTAMP AS [create_dtm]
 
 
 GO
