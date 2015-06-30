@@ -1,15 +1,15 @@
-15-06-29 22:54:55.060 [main] main Entering application
-15-06-29 22:54:55.061 [main] main Interpreting command line parameters
-15-06-29 22:54:55.062 [main] main Tags: Axxxx
-15-06-29 22:54:55.062 [main] main Scenarios: TEST3,TEST2
-15-06-29 22:54:55.062 [main] main Establishing management database.
-15-06-29 22:54:55.558 [main] main Initiating testing harness
-15-06-29 22:54:55.597 [main] main Performing tests
-15-06-29 22:54:55.597 [main] perfomTests Identified (1) matching test(s).
-15-06-29 22:54:55.597 [main] performTest Testing scenario "TEST1" (a1ef67e5-57ce-46b8-b6c6-03b9fe6a1184).
-15-06-29 22:54:55.710 [main] verifyMetaData Adding "TEST1" metadata "order_count".
-15-06-29 22:54:55.710 [main] verifyMetaData Adding "TEST1" metadata "sales".
-15-06-29 22:54:55.711 [main] verifyMetaData Adding "TEST1" metadata "max_order_number".
-15-06-29 22:54:55.711 [main] verifyMetaData Adding "TEST1" metadata "min_order_date".
-15-06-29 22:54:55.893 [main] writeTest Writing test TEST1
-15-06-29 22:54:56.129 [main] main Exiting application.
+2015-06-29 23:24:49.167 [main] main Entering application
+2015-06-29 23:24:49.169 [main] main Interpreting command line parameters
+2015-06-29 23:24:49.169 [main] main Tags: (not specified)
+2015-06-29 23:24:49.169 [main] main Scenarios: (not specified)
+2015-06-29 23:24:49.170 [main] main Establishing management database.
+2015-06-29 23:24:50.264 [main] main Initiating testing harness
+2015-06-29 23:24:50.479 [main] main Performing tests
+2015-06-29 23:24:50.479 [main] perfomTests Identified (1) matching test(s).
+2015-06-29 23:24:50.479 [main] performTest Testing scenario "TEST1" (825b29a7-49a6-4713-b05d-d20d20808e81).
+2015-06-29 23:24:50.609 [main] verifyMetaData Adding "TEST1" metadata "order_count".
+2015-06-29 23:24:50.609 [main] verifyMetaData Adding "TEST1" metadata "sales".
+2015-06-29 23:24:50.610 [main] verifyMetaData Adding "TEST1" metadata "max_order_number".
+2015-06-29 23:24:50.610 [main] verifyMetaData Adding "TEST1" metadata "min_order_date".
+2015-06-29 23:24:50.793 [main] writeTest Writing test TEST1
+2015-06-29 23:24:51.436 [main] main Exiting application.

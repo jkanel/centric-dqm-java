@@ -1,9 +1,12 @@
 package com.centric.dqm;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.security.CodeSource;
 
 import com.centric.dqm.data.Bootstrapper;
 import com.centric.dqm.data.DataUtils;
@@ -60,8 +63,8 @@ public class Application {
     		throw e;
     	} 
     	
-    	logger.info("Tags: " + ((tags.length()==0) ? "(not specified)" : tags));
-    	logger.info("Scenarios: " + ((scenarioIdentifiers.length()==0) ? "(not specified)" : scenarioIdentifiers));
+    	logger.info("Tags: " + ((tags == null || tags.length()==0) ? "(not specified)" : tags));
+    	logger.info("Scenarios: " + ((scenarioIdentifiers == null || scenarioIdentifiers.length()==0) ? "(not specified)" : scenarioIdentifiers));
     	
     	// #################################################
     	logger.info("Establishing management database.");    	
@@ -90,7 +93,7 @@ public class Application {
         	
         	harness.ScenarioFilterList = DataUtils.getListFromString(scenarioIdentifiers);
         	harness.TagList = DataUtils.getListFromString(tags);
-    		
+        	
         	HarnessReader.readHarness(config.Connection, harness);
     		
     	} catch(Exception e)
@@ -133,12 +136,18 @@ public class Application {
     	
 	}
 	
-	public static String getJarPath() throws UnsupportedEncodingException
+	public static String getJarPath() throws UnsupportedEncodingException, URISyntaxException
 	{
-		String path = Application.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		String decodedPath = URLDecoder.decode(path, "UTF-8");
+		//String path = Application.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		//String path = ClassLoader.getSystemClassLoader().getResource(".").getPath();
+		//String decodedPath = URLDecoder.decode(path, "UTF-8");
+		//return decodedPath;
 		
-		return decodedPath;
+		CodeSource codeSource = Application.class.getProtectionDomain().getCodeSource();
+		File jarFile = new File(codeSource.getLocation().toURI().getPath());
+		String jarDir = jarFile.getParentFile().getPath();
+		
+		return jarDir;
 	}
 	
 	public static String getExceptionStackTrace(Exception ex)

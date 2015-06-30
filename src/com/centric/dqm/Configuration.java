@@ -8,10 +8,12 @@ import com.centric.dqm.data.IConnection;
 
 
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -23,7 +25,7 @@ public class Configuration {
 	
 	public IConnection Connection;
 	
-	public Configuration() throws IOException, SQLException
+	public Configuration() throws IOException, SQLException, URISyntaxException
 	{
 		readConfiguration();
 	}
@@ -32,8 +34,9 @@ public class Configuration {
 	 * Reads the configuration file (Configuration.CONFIG_FILENAME)
 	 * and establishes a connection to the Data Quality Monitoring database.
 	 * @throws SQLException 
+	 * @throws URISyntaxException 
 	*/
-	public void readConfiguration() throws IOException, SQLException {
+	public void readConfiguration() throws IOException, SQLException, URISyntaxException {
 
 		Properties prop = new Properties();
 		String path = Application.getJarPath();

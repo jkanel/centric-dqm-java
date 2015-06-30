@@ -214,7 +214,14 @@ public class DataUtils {
 	
 	public static List<String> getListFromString(String value, String delimter)
 	{
-		return new ArrayList<String>(Arrays.asList(value.split(delimter)));
+		if(value == null)
+		{
+			// return empty list
+			return new ArrayList<String>();
+		} else
+		{
+			return new ArrayList<String>(Arrays.asList(value.split(delimter)));
+		}
 	}
 
 	public static boolean listsIntersect(List<String> listA, List<String> listB)
