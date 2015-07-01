@@ -258,11 +258,20 @@ public class Measure {
 					Double value = (double)(this.actualValueInt - this.expectedValueInt)/(double)this.expectedValueInt;
 					
 					// determine the scale to apply to the variance %
-					actualScale = new BigDecimal(actualValueInt).scale();
-					expectedScale = new BigDecimal(this.expectedValueInt).scale();
-					scale = 4 + 2*expectedScale - actualScale;
+					//actualScale = new BigDecimal(actualValueInt).scale();
+					//expectedScale = new BigDecimal(this.expectedValueInt).scale();
+					//scale = 4 + 2*expectedScale - actualScale;
 					
-					this._resultVarianceRate =  new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).doubleValue(); 	
+					scale = 8;
+					
+					try
+					{
+						this._resultVarianceRate =  new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).doubleValue();
+						
+					} catch(NumberFormatException e)
+					{
+						this._resultVarianceRate = null;
+					}
 					
 				}
 				catch(NullPointerException e)
@@ -286,11 +295,21 @@ public class Measure {
 					Double value = (this.actualValueNumeric - this.expectedValueNumeric)/this.expectedValueNumeric;
 					
 					// determine the scale to apply to the variance %
-					actualScale = new BigDecimal(this.actualValueNumeric).scale();
-					expectedScale = new BigDecimal(this.expectedValueNumeric).scale();
-					scale = 4 + 2 * expectedScale - actualScale;
-									
-					this._resultVarianceRate = new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).doubleValue();
+					//actualScale = new BigDecimal(this.actualValueNumeric).scale();
+					//expectedScale = new BigDecimal(this.expectedValueNumeric).scale();
+					//scale = 4 + 2 * expectedScale - actualScale;
+					
+					scale = 8;
+					
+					try
+					{
+						this._resultVarianceRate = new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).doubleValue();
+						
+					} catch(NumberFormatException e)
+					{
+						this._resultVarianceRate = null;
+					}
+					
 					
 				}
 				catch(NullPointerException e)

@@ -29,9 +29,9 @@ CREATE TABLE dqm.scenario (
 , grain_list varchar(2000)
 , modulus int default 1 -- inverse fraction of data to consider in a given test
 , expected_connection_uid varchar(200)
-, expected_command varchar(2000)
+, expected_command varchar(max)
 , actual_connection_uid varchar(200)
-, actual_command varchar(2000)
+, actual_command varchar(max)
 , case_failure_record_limit int NOT NULL DEFAULT 100 -- number of success values to preserve
 , case_success_record_limit int NOT NULL DEFAULT 0  -- number of success values to preserve
 , allowed_case_failure_rate float NOT NULL DEFAULT 0.0  -- number of results allowed to fail
