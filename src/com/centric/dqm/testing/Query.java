@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.centric.dqm.Application;
 import com.centric.dqm.data.DataUtils;
 import com.centric.dqm.data.IConnection;
 
@@ -41,6 +42,8 @@ public class Query {
 		} catch(Exception e)
 		{
 			this.queryException = e;
+			Application.logger.error(Application.getExceptionStackTrace(e));
+			
 			return null;
 		}
 		

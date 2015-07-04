@@ -68,6 +68,10 @@ public class HarnessReader {
 			sc.modulus = srs.getInt("modulus");
 			sc.modularity= srs.getInt("modularity");
 			
+			String fneChar = srs.getString("flexible_null_equality_flag");
+			sc.flexibleNullEqualityFlag = (fneChar == null ? false : fneChar.equals("Y"));
+			
+			
 			sc.Tags = DataUtils.getListFromString(srs.getString("tag_list"));
 
 			
@@ -90,6 +94,15 @@ public class HarnessReader {
 			{
 				
 				m = new Measure(frs.getString("measure_name"));
+				
+				// default to the scenario null equals zero setting
+				if(srs.getString("flexible_null_equality_flag") != null)
+				{
+					m.flexibleNullEqualityFlag = frs.getString("flexible_null_equality_flag").equals("Y");
+				} else 
+				{
+					m.flexibleNullEqualityFlag = sc.flexibleNullEqualityFlag;
+				}
 				
 				m.precision = frs.getInt("precision");
 				m.allowedVariance = frs.getDouble("allowed_variance");

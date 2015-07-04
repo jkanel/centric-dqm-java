@@ -4,6 +4,7 @@ SELECT
 , sm.precision
 , sm.allowed_variance
 , sm.allowed_variance_rate
+, sm.flexible_null_equality_flag
 FROM
 dqm.scenario_measure sm
 WHERE

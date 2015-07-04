@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.centric.dqm.Application;
+
 public class Measure {
 	
 	public String columnName;
@@ -22,6 +24,8 @@ public class Measure {
 	protected Boolean _isOutOfRange = null;
 	protected boolean _isActualValueAssigned = false;
 	protected boolean _isExpectedValueAssigned = false;
+	
+	public boolean flexibleNullEqualityFlag = false;
 	
 	public Double actualValueNumeric;
 	public String actualValueText;
@@ -137,6 +141,7 @@ public class Measure {
 	{
 		if (this._resultVariance == null)
 		{
+			
 			switch(this.internalDataType)
 			{
 			case TestCase.INTERNAL_DATA_TYPE_INTEGER:
@@ -146,6 +151,17 @@ public class Measure {
 				{
 					this._resultVariance = 0.0d;
 					break;
+					
+				} else if (this.flexibleNullEqualityFlag == true)
+				{
+					if ((this.actualValueInt == 0 && this.expectedValueInt == null) ||
+						 (this.actualValueInt == null && this.expectedValueInt == 0))
+					{
+						
+					this._resultVariance = 0.0d;
+					break;
+				
+					}
 				}
 				
 				
@@ -167,6 +183,16 @@ public class Measure {
 				{
 					this._resultVariance = 0.0d;
 					break;
+				} else if (this.flexibleNullEqualityFlag == true)
+				{
+					if ((this.actualValueNumeric == 0.0d && this.expectedValueNumeric == null) ||
+						 (this.actualValueNumeric == null && this.expectedValueNumeric == 0.0d))
+					{
+						
+					this._resultVariance = 0.0d;
+					break;
+				
+					}
 				}
 				
 				
@@ -189,6 +215,17 @@ public class Measure {
 				{
 					this._resultVariance = 0.0d;
 					break;
+					
+				} else if (this.flexibleNullEqualityFlag == true)
+				{
+					if ((this.actualValueText == null && this.expectedValueText.equals("")) ||
+						 (this.actualValueText.equals("") && this.expectedValueText == null))
+					{
+						
+					this._resultVariance = 0.0d;
+					break;
+				
+					}
 				}
 				
 				try
@@ -208,6 +245,29 @@ public class Measure {
 				{
 					this._resultVariance = 0.0d;
 					break;
+				} else if (this.flexibleNullEqualityFlag == true)
+				{
+					
+					Date zeroDate = null; 
+					
+					try
+					{
+						zeroDate = new SimpleDateFormat().parse("1900-01-01");
+					}
+					catch (Exception e)
+					{
+						Application.logger.error(Application.getExceptionStackTrace(e));
+					}
+					
+					
+					if ((this.actualValueDate.equals(zeroDate) && this.expectedValueDate == null) ||
+						 (this.actualValueDate == null && this.expectedValueDate.equals(zeroDate)))
+					{
+						
+					this._resultVariance = 0.0d;
+					break;
+				
+					}
 				}
 				
 				try
@@ -228,7 +288,7 @@ public class Measure {
 			}			
 		}
 		
-		return _resultVariance;
+		return this._resultVariance;
 	}
 	
 	public Double getVarianceRate()
@@ -238,24 +298,27 @@ public class Measure {
 		if (this._resultVarianceRate == null)
 		{
 		
-			int actualScale;
-			int expectedScale;
+			// int actualScale;
+			// int expectedScale;
 			int scale;
+			
+			Double variance = this.getVariance();
+			
+			if (variance == 0.0d)
+			{
+				this._resultVarianceRate = 0.0d;
+				return this._resultVarianceRate;
+			}
 			
 			switch(this.internalDataType)
 			{
 			case TestCase.INTERNAL_DATA_TYPE_INTEGER:
 				
-				if(this.actualValueInt == null && this.expectedValueInt == null)
-				{
-					this._resultVarianceRate = 0.0d;
-					break;
-				}
-				
+
 				try
 				{				
 				
-					Double value = (double)(this.actualValueInt - this.expectedValueInt)/(double)this.expectedValueInt;
+					Double value = variance/(double)this.expectedValueInt;
 					
 					// determine the scale to apply to the variance %
 					//actualScale = new BigDecimal(actualValueInt).scale();
@@ -283,16 +346,11 @@ public class Measure {
 				
 			case TestCase.INTERNAL_DATA_TYPE_NUMERIC:				
 				
-				if(this.actualValueNumeric == null && this.expectedValueNumeric == null)
-				{
-					this._resultVarianceRate = 0.0d;
-					break;
-				}
-				
+
 				try
 				{
 					
-					Double value = (this.actualValueNumeric - this.expectedValueNumeric)/this.expectedValueNumeric;
+					Double value = variance/this.expectedValueNumeric;
 					
 					// determine the scale to apply to the variance %
 					//actualScale = new BigDecimal(this.actualValueNumeric).scale();
@@ -322,12 +380,6 @@ public class Measure {
 
 			case TestCase.INTERNAL_DATA_TYPE_TEXT:			
 				
-				if(this.actualValueText == null && this.expectedValueText == null)
-				{
-					this._resultVarianceRate = 0.0d;
-					break;
-				}
-				
 				try
 				{					
 					this._resultVarianceRate = (this.actualValueText.equals(this.expectedValueText)) ? 0.0d : 1.0d;
@@ -340,13 +392,6 @@ public class Measure {
 				break;
 				
 			case TestCase.INTERNAL_DATA_TYPE_DATE:				
-				
-				
-				if(this.actualValueDate == null && this.expectedValueDate == null)
-				{
-					this._resultVarianceRate = 0.0d;
-					break;
-				}
 				
 				
 				try

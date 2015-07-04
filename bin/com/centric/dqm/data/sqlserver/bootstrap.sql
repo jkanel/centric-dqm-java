@@ -35,6 +35,7 @@ CREATE TABLE dqm.scenario (
 , case_failure_record_limit int NOT NULL DEFAULT 100 -- number of success values to preserve
 , case_success_record_limit int NOT NULL DEFAULT 0  -- number of success values to preserve
 , allowed_case_failure_rate float NOT NULL DEFAULT 0.0  -- number of results allowed to fail
+, flexible_null_equality_flag CHAR(1)
 , active_flag char(1) DEFAULT 'Y' NOT NULL 
 , create_dtm datetime DEFAULT CURRENT_TIMESTAMP
 , CONSTRAINT scenario_pk PRIMARY KEY (scenario_uid)
@@ -45,6 +46,7 @@ CREATE TABLE dqm.scenario_measure (
   scenario_uid varchar(200) NOT NULL
 , measure_name varchar(200) NOT NULL
 , precision int -- number of significant digits used to evaulat the variance
+, flexible_null_equality_flag CHAR(1)
 , allowed_variance float
 , allowed_variance_rate float
 , create_dtm datetime DEFAULT CURRENT_TIMESTAMP

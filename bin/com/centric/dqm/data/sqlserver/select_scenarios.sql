@@ -26,6 +26,7 @@ SELECT
 , sc.case_failure_record_limit
 , sc.case_success_record_limit
 , sc.allowed_case_failure_rate
+, sc.flexible_null_equality_flag
 FROM
 dqm.scenario sc
 LEFT JOIN dqm.connection ac ON ac.connection_uid = sc.actual_connection_uid

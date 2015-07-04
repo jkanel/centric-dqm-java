@@ -129,6 +129,11 @@ public class DataUtils {
 	    Statement stmt = null;
 	    Connection con = null;
 	    
+	    if(rs == null)
+	    {
+	    	return;
+	    }
+	    
 	    // capture the statement object
 	    try 
 	    {	    	

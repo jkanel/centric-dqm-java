@@ -145,6 +145,7 @@ INSERT INTO [dqm].[scenario]
            ,[actual_command]
            ,[case_failure_record_limit]
            ,[case_success_record_limit]
+           ,[flexible_null_equality_flag]
            ,[allowed_case_failure_rate]
            ,[active_flag]
            ,[create_dtm])
@@ -161,6 +162,7 @@ SELECT
 , @act AS [actual_command]
 , 1000 AS [case_failure_record_limit]
 , 0 AS [case_success_record_limit]
+, 'Y' AS [flexible_null_equality_flag]
 , 0.05 AS [allowed_case_failure_rate]
 , 'Y' AS [active_flag]
 , CURRENT_TIMESTAMP AS [create_dtm]
@@ -201,7 +203,6 @@ SELECT
   -- supress zero aggregates, replace with NULL
 , CASE WHEN x.operating_profit_amt = 0.0 THEN NULL ELSE x.operating_profit_amt END AS operating_profit_amt
 , x.shared_profit_transfer_amt
-
 FROM
 (
 
@@ -232,17 +233,17 @@ FROM
   , SUM(CASE WHEN  Category IN (''Income'',''COGS'') THEN NetAmt END) AS gross_profit_amt
   , -1*SUM(CASE WHEN Category = ''Non-COGS'' THEN NetAmt END)  AS non_cogs_amt 
   , SUM(NetAmt) AS net_profit_amt
-  , -1* SUM(CASE WHEN Account=''National Cost Allocation'' AND BU NOT IN (''National'',''SSA'') THEN NetAmt END) AS centric_cost_amt
-  , -1* SUM(CASE WHEN Account=''National Cost Allocation'' AND BU IN (''National'',''SSA'') THEN NetAmt END) AS centric_cost_transfer_amt
+  , -1* SUM(CASE WHEN Category=''Non-COGS'' AND BU IN (''National'',''Shared Services'') THEN NetAmt END) AS centric_cost_amt
+  , -1* SUM(CASE WHEN RollupAccount=''National Cost Allocation'' AND BU IN (''National'',''Shared Services'') THEN NetAmt END) AS centric_cost_transfer_amt
 
   , -1*(
 
-      ISNULL(SUM(CASE WHEN Account=''National Cost Allocation'' AND BU NOT IN (''National'',''SSA'') THEN NetAmt END), 0)
-      - ISNULL(SUM(CASE WHEN Account=''National Cost Allocation'' AND BU IN (''National'',''SSA'') THEN NetAmt END), 0)
+      ISNULL(SUM(CASE WHEN RollupAccount=''National Cost Allocation'' AND BU NOT IN (''National'',''Shared Services'') THEN NetAmt END), 0)
+      - ISNULL(SUM(CASE WHEN RollupAccount=''National Cost Allocation'' AND BU IN (''National'',''Shared Services'') THEN NetAmt END), 0)
 
     ) AS net_centric_cost_amt
 
-  , -1*SUM(CASE WHEN Category = ''Non-COGS'' AND BU NOT IN (''National'',''SSA'') THEN NetAmt END) AS bu_cost_amt
+  , -1*SUM(CASE WHEN Category = ''Non-COGS'' AND BU NOT IN (''National'',''Shared Services'') THEN NetAmt END) AS bu_cost_amt
   , (
   
       ISNULL(SUM(CASE WHEN  Category IN (''Income'',''COGS'') THEN NetAmt END), 0)
@@ -254,7 +255,8 @@ FROM
   FROM
   CentricEnterpriseDW.dbo.QB_PL_Detail
   WHERE
-  Year >= 2010
+  Year >= 2010 AND Year <= 2015
+ 
   GROUP BY
     year
   , month
@@ -331,7 +333,7 @@ SELECT
 , @exp AS [expected_command]
 , 'CAP_DW' AS [actual_connection_uid]
 , @act AS [actual_command]
-, 1000 AS [case_failure_record_limit]
+, 2000 AS [case_failure_record_limit]
 , 0 AS [case_success_record_limit]
 , 0.00 AS [allowed_case_failure_rate]
 , 'Y' AS [active_flag]
@@ -352,6 +354,7 @@ INSERT INTO [dqm].[scenario_measure]
            ,[precision]
            ,[allowed_variance]
            ,[allowed_variance_rate]
+           , [flexible_null_equality_flag]
            ,[create_dtm])
 SELECT
 'TEST1' AS [scenario_uid]
@@ -359,6 +362,7 @@ SELECT
 ,2 AS [precision]
 ,0.20 AS [allowed_variance]
 ,0.05[allowed_variance_rate]
+, 'N' AS [flexible_null_equality_flag]
 , CURRENT_TIMESTAMP AS [create_dtm]
 
 GO

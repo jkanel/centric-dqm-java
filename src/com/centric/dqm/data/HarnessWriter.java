@@ -34,7 +34,7 @@ public class HarnessWriter {
 		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.INSERT_TEST_RESOURCE);
 	
 	
-		Application.logger.info("Writing test " + sc.identifier);
+		Application.logger.info("Writing test " + sc.identifier + " results");
 		
 		// prepare calculated parameters
 		int failureCount = sc.getFailureCount();
@@ -113,9 +113,9 @@ public class HarnessWriter {
 		  DataUtils.delimitSQLString(failureFlag),
 	
 		  DataUtils.delimitSQLString(errorFlag),
-		  (sc.testException == null) ? "NULL" : DataUtils.delimitSQLString(Application.getExceptionStackTrace(sc.testException, 2000)),
-		  (sc.expectedQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(Application.getExceptionStackTrace(sc.expectedQuery.queryException, 2000)),
-		  (sc.actualQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(Application.getExceptionStackTrace(sc.actualQuery.queryException,2000))
+		  (sc.testException == null) ? "NULL" : DataUtils.delimitSQLString(sc.testException.getMessage()),
+		  (sc.expectedQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(sc.expectedQuery.queryException.getMessage()),
+		  (sc.actualQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(sc.actualQuery.queryException.getMessage())
 		  
 		};
 		

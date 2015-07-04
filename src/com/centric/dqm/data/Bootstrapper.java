@@ -11,11 +11,17 @@ public class Bootstrapper {
 	{
 		if(Bootstrapper.isBootstrapped(con) == false)
 		{
-			String commandText;
-	
-			commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.BOOTSTRAP_RESOURCE);		
-			DataUtils.executeCommand(commandText, con);			
+			Bootstrapper.bootstrap(con);		
 		}
+	}
+	
+	public static void bootstrap(IConnection con) throws FileNotFoundException, IOException, SQLException
+	{
+		String commandText;
+
+		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.BOOTSTRAP_RESOURCE);		
+		DataUtils.executeCommand(commandText, con);			
+	
 	}
 	
 	public static boolean isBootstrapped(IConnection con) throws FileNotFoundException, IOException, SQLException

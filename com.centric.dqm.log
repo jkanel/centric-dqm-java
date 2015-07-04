@@ -1,38 +1,38 @@
-15-06-30 20:10:44.025 [main] main Entering application
-15-06-30 20:10:44.027 [main] main Interpreting command line parameters
-15-06-30 20:10:44.027 [main] main Tags: (not specified)
-15-06-30 20:10:44.027 [main] main Scenarios: (not specified)
-15-06-30 20:10:44.027 [main] main Establishing management database.
-15-06-30 20:10:44.533 [main] main Initiating testing harness
-15-06-30 20:10:44.573 [main] main Performing tests
-15-06-30 20:10:44.573 [main] perfomTests Identified (2) matching test(s).
-15-06-30 20:10:44.574 [main] performTest Testing scenario "CAP_GL1" (da237a42-f276-43a4-b539-87048b002a93).
-15-06-30 20:10:46.249 [main] verifyMetaData Adding "CAP_GL1" metadata "net_amt".
-15-06-30 20:10:46.250 [main] verifyMetaData Adding "CAP_GL1" metadata "income_amt".
-15-06-30 20:10:46.250 [main] verifyMetaData Adding "CAP_GL1" metadata "expense_amt".
-15-06-30 20:10:46.251 [main] verifyMetaData Adding "CAP_GL1" metadata "net_expense_amt".
-15-06-30 20:10:46.251 [main] verifyMetaData Adding "CAP_GL1" metadata "net_revenue_amt".
-15-06-30 20:10:46.252 [main] verifyMetaData Adding "CAP_GL1" metadata "cogs_amt".
-15-06-30 20:10:46.252 [main] verifyMetaData Adding "CAP_GL1" metadata "net_cogs_amt".
-15-06-30 20:10:46.252 [main] verifyMetaData Adding "CAP_GL1" metadata "reimb_expense_income_amt".
-15-06-30 20:10:46.253 [main] verifyMetaData Adding "CAP_GL1" metadata "reimb_expense_cost_amt".
-15-06-30 20:10:46.253 [main] verifyMetaData Adding "CAP_GL1" metadata "employee_cost_amt".
-15-06-30 20:10:46.254 [main] verifyMetaData Adding "CAP_GL1" metadata "contractor_cost_amt".
-15-06-30 20:10:46.254 [main] verifyMetaData Adding "CAP_GL1" metadata "w2t_cost_amt".
-15-06-30 20:10:46.255 [main] verifyMetaData Adding "CAP_GL1" metadata "gross_profit_amt".
-15-06-30 20:10:46.255 [main] verifyMetaData Adding "CAP_GL1" metadata "non_cogs_amt".
-15-06-30 20:10:46.255 [main] verifyMetaData Adding "CAP_GL1" metadata "net_profit_amt".
-15-06-30 20:10:46.256 [main] verifyMetaData Adding "CAP_GL1" metadata "centric_cost_amt".
-15-06-30 20:10:46.256 [main] verifyMetaData Adding "CAP_GL1" metadata "centric_cost_transfer_amt".
-15-06-30 20:10:46.257 [main] verifyMetaData Adding "CAP_GL1" metadata "net_centric_cost_amt".
-15-06-30 20:10:46.257 [main] verifyMetaData Adding "CAP_GL1" metadata "bu_cost_amt".
-15-06-30 20:10:46.257 [main] verifyMetaData Adding "CAP_GL1" metadata "operating_profit_amt".
-15-06-30 20:10:46.258 [main] verifyMetaData Adding "CAP_GL1" metadata "shared_profit_transfer_amt".
-15-06-30 20:10:49.363 [main] performTest Testing scenario "TEST1" (f4227979-d064-494a-b29a-47112f86ff5b).
-15-06-30 20:10:49.491 [main] verifyMetaData Adding "TEST1" metadata "order_count".
-15-06-30 20:10:49.492 [main] verifyMetaData Adding "TEST1" metadata "sales".
-15-06-30 20:10:49.492 [main] verifyMetaData Adding "TEST1" metadata "max_order_number".
-15-06-30 20:10:49.492 [main] verifyMetaData Adding "TEST1" metadata "min_order_date".
-15-06-30 20:10:49.645 [main] writeTest Writing test CAP_GL1
-15-06-30 20:10:59.105 [main] writeTest Writing test TEST1
-15-06-30 20:10:59.214 [main] main Exiting application.
+15-07-04 19:51:12.755 [main] main Entering application
+15-07-04 19:51:12.757 [main] main Interpreting command line parameters
+15-07-04 19:51:12.757 [main] main Tags: (not specified)
+15-07-04 19:51:12.757 [main] main Scenarios: (not specified)
+15-07-04 19:51:12.757 [main] main Checking that management database exists at
+15-07-04 19:51:13.238 [main] main Initiating testing harness
+15-07-04 19:51:13.276 [main] main Performing tests
+15-07-04 19:51:13.276 [main] perfomTests Identified (2) matching test(s).
+15-07-04 19:51:13.277 [main] performTest Testing scenario "CAP_GL1" (35aece75-adcb-45a0-8477-8bbbb327744a).
+15-07-04 19:51:15.048 [main] verifyMetaData Adding "CAP_GL1" metadata "net_amt".
+15-07-04 19:51:15.048 [main] verifyMetaData Adding "CAP_GL1" metadata "income_amt".
+15-07-04 19:51:15.048 [main] verifyMetaData Adding "CAP_GL1" metadata "expense_amt".
+15-07-04 19:51:15.048 [main] verifyMetaData Adding "CAP_GL1" metadata "net_expense_amt".
+15-07-04 19:51:15.048 [main] verifyMetaData Adding "CAP_GL1" metadata "net_revenue_amt".
+15-07-04 19:51:15.048 [main] verifyMetaData Adding "CAP_GL1" metadata "cogs_amt".
+15-07-04 19:51:15.049 [main] verifyMetaData Adding "CAP_GL1" metadata "net_cogs_amt".
+15-07-04 19:51:15.049 [main] verifyMetaData Adding "CAP_GL1" metadata "reimb_expense_income_amt".
+15-07-04 19:51:15.050 [main] verifyMetaData Adding "CAP_GL1" metadata "reimb_expense_cost_amt".
+15-07-04 19:51:15.050 [main] verifyMetaData Adding "CAP_GL1" metadata "employee_cost_amt".
+15-07-04 19:51:15.050 [main] verifyMetaData Adding "CAP_GL1" metadata "contractor_cost_amt".
+15-07-04 19:51:15.051 [main] verifyMetaData Adding "CAP_GL1" metadata "w2t_cost_amt".
+15-07-04 19:51:15.051 [main] verifyMetaData Adding "CAP_GL1" metadata "gross_profit_amt".
+15-07-04 19:51:15.052 [main] verifyMetaData Adding "CAP_GL1" metadata "non_cogs_amt".
+15-07-04 19:51:15.052 [main] verifyMetaData Adding "CAP_GL1" metadata "net_profit_amt".
+15-07-04 19:51:15.052 [main] verifyMetaData Adding "CAP_GL1" metadata "centric_cost_amt".
+15-07-04 19:51:15.053 [main] verifyMetaData Adding "CAP_GL1" metadata "centric_cost_transfer_amt".
+15-07-04 19:51:15.053 [main] verifyMetaData Adding "CAP_GL1" metadata "net_centric_cost_amt".
+15-07-04 19:51:15.053 [main] verifyMetaData Adding "CAP_GL1" metadata "bu_cost_amt".
+15-07-04 19:51:15.054 [main] verifyMetaData Adding "CAP_GL1" metadata "operating_profit_amt".
+15-07-04 19:51:15.054 [main] verifyMetaData Adding "CAP_GL1" metadata "shared_profit_transfer_amt".
+15-07-04 19:51:19.221 [main] performTest Testing scenario "TEST1" (ce3122f3-e33c-4208-b551-4dcd39a431d4).
+15-07-04 19:51:19.360 [main] verifyMetaData Adding "TEST1" metadata "order_count".
+15-07-04 19:51:19.361 [main] verifyMetaData Adding "TEST1" metadata "sales".
+15-07-04 19:51:19.361 [main] verifyMetaData Adding "TEST1" metadata "max_order_number".
+15-07-04 19:51:19.361 [main] verifyMetaData Adding "TEST1" metadata "min_order_date".
+15-07-04 19:51:19.593 [main] writeTest Writing test CAP_GL1
+15-07-04 19:51:29.179 [main] writeTest Writing test TEST1
+15-07-04 19:51:29.598 [main] main Exiting the application

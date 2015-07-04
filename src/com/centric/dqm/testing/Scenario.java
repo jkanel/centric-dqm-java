@@ -42,6 +42,8 @@ public class Scenario {
 	public String testGuid = null;
 	public Date testDate = null;
 	
+	public boolean flexibleNullEqualityFlag = false;
+	
 	protected int _successCount = -1;
 	protected int _failureCount = -1;
 	
@@ -69,6 +71,8 @@ public class Scenario {
 					+ String.valueOf(Scenario.MAX_GRAIN_COUNT) + ".  The number of grain columns specified is " 
 					+ String.valueOf(this.BaseTestCase.Grains.size()) + ".");
 			
+			Application.logger.error(Application.getExceptionStackTrace(this.testException));
+			
 			return;
 		}
 		
@@ -91,6 +95,8 @@ public class Scenario {
 		} catch (Exception e) {
 			
 			this.testException = e;
+			Application.logger.error(Application.getExceptionStackTrace(e));
+			
 			testFailureFlag = true;
 			
 		} finally
@@ -119,6 +125,8 @@ public class Scenario {
 		} catch (Exception e) {
 			
 			this.testException = e;
+			Application.logger.error(Application.getExceptionStackTrace(e));
+			
 			testFailureFlag = true;
 			
 		} finally
@@ -126,11 +134,6 @@ public class Scenario {
 			// dispose of the resultset
 			DataUtils.disposeResulset(ars);			
 		}
-		
-		ars = null;
-
-
-
 	}
 	
 	/**
