@@ -82,27 +82,26 @@ public class Application {
     	// #################################################
     	logger.info("Checking that management database exists at");
     	
-    	Configuration config = null;
-    	
     	try
     	{
-    		config = new Configuration();
+    		Configuration.readConfiguration();
     		
-    		if(Bootstrapper.isBootstrapped(config.Connection)==false)
+    		if(Bootstrapper.isBootstrapped(Configuration.Connection)==false)
     		{
     	
     			logger.info("Establishing management database");
-    			logger.info("Driver: " + config.Connection.getJdbcDriver()); 
-    			logger.info("Url: " + config.Connection.getConnectionUrl()); 
+    			logger.info("Driver: " + Configuration.Connection.getJdbcDriver()); 
+    			logger.info("Url: " + Configuration.Connection.getConnectionUrl()); 
     			
-    			Bootstrapper.bootstrap(config.Connection);
+    			Bootstrapper.bootstrap(Configuration.Connection);
     			
     			logger.info("Management database has been created");
     			logger.info("Exiting the application");    			
     			return;
+    			
     		} else if (purgeDays != null)
     		{
-    			HarnessWriter.deleteTestCase(config.Connection, purgeDays);
+    			HarnessWriter.deleteTestCase(Configuration.Connection, purgeDays);
     		}
     		
     		
@@ -126,7 +125,7 @@ public class Application {
         	harness.ScenarioFilterList = DataUtils.getListFromString(scenarioIdentifiers);
         	harness.TagList = DataUtils.getListFromString(tags);
         	
-        	HarnessReader.readHarness(config.Connection, harness);
+        	HarnessReader.readHarness(Configuration.Connection, harness);
     		
     	} catch(Exception e)
     	{
@@ -152,7 +151,7 @@ public class Application {
     	try
     	{
 
-    		HarnessWriter.writeHarness(config.Connection, harness);
+    		HarnessWriter.writeHarness(Configuration.Connection, harness);
     		
     	} catch(Exception e)
     	{

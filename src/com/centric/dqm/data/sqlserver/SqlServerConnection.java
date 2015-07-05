@@ -100,7 +100,7 @@ public class SqlServerConnection implements IConnection  {
 	
 	public ResultSet executeCommandWithResult(String commandText)
 	{
-	    return DataUtils.executeCommandWithResult(commandText, this);	    
+	    return DataUtils.executeCommandWithResult(commandText, this, DataUtils.MAX_RESULTSET_ROWS);	    
 	}
 	
 	public void executeCommand(String commandText)

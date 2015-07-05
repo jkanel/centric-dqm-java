@@ -31,7 +31,7 @@ public class DataUtils {
 	public static final String DELETE_TEST_CASE_RESOURCE = "delete_test_case.sql";
 	public static final String SELECT_CURRENT_DATE_RESOURCE = "select_current_date.sql";
 	
-	public static final int MAX_ROWS = 1000;
+	public static final int MAX_RESULTSET_ROWS = 10000;
 	
 	public static Properties getConnectionProperties(String url, String user, String password, int timeout)
 	{
@@ -86,6 +86,11 @@ public class DataUtils {
 	
 	public static ResultSet executeCommandWithResult(String commandText, IConnection CurrentConnection)
 	{
+		return executeCommandWithResult(commandText, CurrentConnection, 0);
+	}
+	
+	public static ResultSet executeCommandWithResult(String commandText, IConnection CurrentConnection, int maxRows)
+	{
 
 	    // Declare the JDBC objects.
 	    Connection con = null;
@@ -105,7 +110,12 @@ public class DataUtils {
 	
 	       // Create and execute an SQL statement that returns some data.
 	       stmt = con.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
-	       stmt.setMaxRows(DataUtils.MAX_ROWS);
+	       
+	       if(maxRows > 0)
+	       {
+	    	   stmt.setMaxRows(maxRows);
+	       }
+	       
 	       
 	       // set the query timeout if applicable
 	       if(CurrentConnection.getConnectionTimeout() > 0)
@@ -113,7 +123,7 @@ public class DataUtils {
 	    	   stmt.setQueryTimeout(CurrentConnection.getConnectionTimeout());
 	       }
 	       
-	       rs = stmt.executeQuery(commandText);
+	       rs = stmt.executeQuery(commandText.trim());
 	       	
 	    }
 	    catch (Exception e)

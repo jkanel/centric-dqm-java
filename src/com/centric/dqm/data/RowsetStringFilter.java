@@ -31,17 +31,17 @@ public class RowsetStringFilter implements Predicate {
          try {
              for (int i = 0; i < this.values.length; i++) {
 
-                 String cityName = null;
+                 String comparisonValue = null;
 
                  if (this.columnNumber > 0) {
-                     cityName = (String)rs.getObject(this.columnNumber);
+                     comparisonValue = (String)rs.getObject(this.columnNumber);
                  } else if (this.columnName != null) {
-                     cityName = (String)rs.getObject(this.columnName);
+                     comparisonValue = (String)rs.getObject(this.columnName);
                  } else {
                      return false;
                  }
 
-                 if (cityName.equalsIgnoreCase(values[i])) {
+                 if (comparisonValue.equalsIgnoreCase(values[i])) {
                      return true;
                  }
              }

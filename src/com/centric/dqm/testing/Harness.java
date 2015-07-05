@@ -19,7 +19,7 @@ public class Harness {
 	}
 	
 	
-	public void perfomTests()
+	public void perfomTests() throws Exception
 	{
 		List<Scenario> matchScenarioFilterList = this.getMatchScenarios(); 
 		

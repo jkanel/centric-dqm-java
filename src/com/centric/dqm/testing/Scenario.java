@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.centric.dqm.Application;
+import com.centric.dqm.Configuration;
 import com.centric.dqm.data.DataUtils;
+import com.centric.dqm.data.HarnessReader;
 import com.centric.dqm.data.IConnection;
 
 public class Scenario {
@@ -56,14 +58,16 @@ public class Scenario {
 		return testGuid;
 	}
 
-	public void performTest()
+	public void performTest() throws Exception
 	{
 		
-		// assign a test guid
-		this.testGuid = java.util.UUID.randomUUID().toString();
-		
 		// assign the execution time
-		this.testDate = new Date();
+		// this.testDate = new Date();
+		
+		this.testDate = HarnessReader.getDate(Configuration.Connection);
+		
+		// assign a test guid
+		this.testGuid = java.util.UUID.randomUUID().toString();		
 		
 		Application.logger.info("Testing scenario \"" + this.identifier + "\" (" + this.testGuid + ").");
 		

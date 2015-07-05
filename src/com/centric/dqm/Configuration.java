@@ -23,7 +23,7 @@ public class Configuration {
 	
 	public final static String CONFIG_FILENAME = "com.centric.dqm.properties";
 	
-	public IConnection Connection;
+	public static IConnection Connection;
 	
 	public Configuration() throws IOException, SQLException, URISyntaxException
 	{
@@ -36,7 +36,7 @@ public class Configuration {
 	 * @throws SQLException 
 	 * @throws URISyntaxException 
 	*/
-	public void readConfiguration() throws IOException, SQLException, URISyntaxException {
+	public static void readConfiguration() throws IOException, SQLException, URISyntaxException {
 
 		Properties prop = new Properties();
 		String path = Application.getJarPath();
@@ -54,7 +54,7 @@ public class Configuration {
 		// compare the driver with connection drivers	
 		String driver = prop.getProperty("driver");
 		
-		this.Connection = DataUtils.getConnectionFromDriver(driver, prop);		
+		Configuration.Connection = DataUtils.getConnectionFromDriver(driver, prop);		
 	}	
 		
 	

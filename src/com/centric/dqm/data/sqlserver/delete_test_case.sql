@@ -4,7 +4,7 @@ FROM
 [dqm].[test] t
 WHERE
 t.test_case_purge_dtm IS NULL
-AND t.create_dtm <= DATEADD(day,-1*{0}, CURRENT_TIMESTAMP)
+AND t.test_dtm <= DATEADD(day,-1*{0}, CURRENT_TIMESTAMP)
 ;
 
 DELETE tc FROM
