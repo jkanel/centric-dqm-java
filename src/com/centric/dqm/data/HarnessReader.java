@@ -1,9 +1,11 @@
 package com.centric.dqm.data;
 
 import java.sql.ResultSet;
+import java.util.Date;
 import java.util.List;
 
 import javax.sql.rowset.FilteredRowSet;
+
 import com.centric.dqm.testing.Grain;
 import com.centric.dqm.testing.Harness;
 import com.centric.dqm.testing.Measure;
@@ -11,6 +13,29 @@ import com.centric.dqm.testing.Scenario;
 import com.sun.rowset.FilteredRowSetImpl;
 
 public class HarnessReader {
+	
+	public static Date getDate(IConnection con) throws Exception
+	{
+		
+		String commandText;
+		ResultSet rs = null;
+		Date currentDate = null;
+		
+		// execute the test for existing tables
+		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.SELECT_CURRENT_DATE_RESOURCE);	
+		rs = DataUtils.executeCommandWithResult(commandText, con);
+		
+		while(rs.next())
+		{
+			currentDate = rs.getDate("current_dt");
+			break;
+		}
+		
+		DataUtils.disposeResulset(rs);
+
+		return currentDate;
+		
+	}
 	
 	public static void readHarness(IConnection con, Harness harness) throws Exception
 	{
@@ -70,6 +95,9 @@ public class HarnessReader {
 			
 			String fneChar = srs.getString("flexible_null_equality_flag");
 			sc.flexibleNullEqualityFlag = (fneChar == null ? false : fneChar.equals("Y"));
+			
+			String activeChar = srs.getString("active_flag");
+			sc.activeFlag = (activeChar == null ? false : activeChar.equals("Y"));
 			
 			
 			sc.Tags = DataUtils.getListFromString(srs.getString("tag_list"));

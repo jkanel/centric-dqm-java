@@ -15,6 +15,8 @@ import com.centric.dqm.data.IConnection;
 
 public class Scenario {
 	
+	// note that max grains are only limited by the
+	// test_case grain columns in the management database
 	public static final int MAX_GRAIN_COUNT = 5;
 	
 	public TestCase BaseTestCase = new TestCase();
@@ -27,6 +29,7 @@ public class Scenario {
 	
 	public Exception testException;
 	boolean testFailureFlag = false;
+	public boolean activeFlag = false;
 	
 	public Integer modulus = null;
 	public Integer modularity = null;

@@ -28,6 +28,8 @@ public class DataUtils {
 	public static final String SELECT_SCENARIO_MEASURES_RESOURCE = "select_scenario_measures.sql";
 	public static final String INSERT_TEST_RESOURCE = "insert_test.sql";
 	public static final String INSERT_TEST_CASE_RESOURCE = "insert_test_case.sql";
+	public static final String DELETE_TEST_CASE_RESOURCE = "delete_test_case.sql";
+	public static final String SELECT_CURRENT_DATE_RESOURCE = "select_current_date.sql";
 	
 	public static final int MAX_ROWS = 1000;
 	
@@ -188,14 +190,14 @@ public class DataUtils {
 	
 	       // Create and execute an SQL statement that returns some data.
 	       stmt = con.createStatement();
-	       stmt.setMaxRows(DataUtils.MAX_ROWS);
 	       
 	       List<String> commandTextList = new ArrayList<String>(Arrays.asList(commandText.split(";")));
 	       
 	       for(String commandTextSegment : commandTextList)
 	       {
 	       
-	    	   stmt.execute(commandTextSegment);
+	    	   stmt.execute(commandTextSegment.trim());
+	    	   con.commit();
 	       }
 	       	
 	    }
@@ -223,9 +225,18 @@ public class DataUtils {
 		{
 			// return empty list
 			return new ArrayList<String>();
+			
 		} else
 		{
-			return new ArrayList<String>(Arrays.asList(value.split(delimter)));
+			
+			if(value.trim().length() == 0 || value.trim().equals("\"\""))
+			{
+				return new ArrayList<String>();
+				
+			} else
+			{			
+				return new ArrayList<String>(Arrays.asList(value.trim().split(delimter)));
+			}
 		}
 	}
 

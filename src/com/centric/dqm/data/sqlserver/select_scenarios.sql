@@ -27,6 +27,7 @@ SELECT
 , sc.case_success_record_limit
 , sc.allowed_case_failure_rate
 , sc.flexible_null_equality_flag
+, sc.active_flag
 FROM
 dqm.scenario sc
 LEFT JOIN dqm.connection ac ON ac.connection_uid = sc.actual_connection_uid
@@ -43,7 +44,5 @@ LEFT JOIN (
 
 ) tm ON tm.scenario_uid = sc.scenario_uid
 LEFT JOIN dqm.test t ON t.test_index = tm.last_test_index
-WHERE
-sc.active_flag = 'Y'
 
 ;

@@ -26,7 +26,8 @@ public class Application {
     	/*
     	 * -c "{Configuration File Path (String)}"
     	 * -t "{Tag (String)}"
-    	 * -s "{Scenario Identifier (String)}" 
+    	 * -s "{Scenario Identifier (String)}"
+    	 * -p "{Number of days before which test cases will be purged} 
     	 */
 
 		// #################################################
@@ -37,6 +38,7 @@ public class Application {
     	
     	String tags = null;
     	String scenarioIdentifiers = null;
+    	Integer purgeDays = null;
         
     	try
     	{
@@ -52,8 +54,20 @@ public class Application {
 	    		} else if(args[n].equals("-s"))
 	    		{
 	    			scenarioIdentifiers = args[n+1];
+	    			n++;  // advance the arg counter
+	    			
+	    		} else if(args[n].equals("-p"))
+	    		{
+	    			purgeDays = Integer.parseInt(args[n+1]);
+	    			
+	    			// set to null of purge days = 0
+	    			if(purgeDays < 0)
+	    			{
+	    				purgeDays = null;
+	    			}
+	    			
 	    			n++;  // advance the arg counter    		    	
-	    		}    		    		
+	    		}        		    		
 	    	}
 	    	
     	} catch (Exception e)
@@ -86,6 +100,9 @@ public class Application {
     			logger.info("Management database has been created");
     			logger.info("Exiting the application");    			
     			return;
+    		} else if (purgeDays != null)
+    		{
+    			HarnessWriter.deleteTestCase(config.Connection, purgeDays);
     		}
     		
     		

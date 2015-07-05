@@ -81,6 +81,7 @@ CREATE TABLE dqm.test (
 , expected_error_message varchar(2000)
 , actual_error_message varchar(2000)
 , test_index int IDENTITY(0,1) not null -- auto incrementing
+, test_case_purge_dtm datetime NULL
 , create_dtm datetime DEFAULT CURRENT_TIMESTAMP
 , CONSTRAINT test_pk PRIMARY KEY (test_uid)
 )

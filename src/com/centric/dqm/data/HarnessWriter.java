@@ -25,6 +25,35 @@ public class HarnessWriter {
 		}
 	}
 	
+	public static void deleteTestCase(IConnection con, Integer purgeDays) throws Exception
+	{
+		String commandText;
+		String parameterizedCommandText;
+		
+		// only proceed if the purgeDays specified is in range
+		if(purgeDays == null || purgeDays < 0)
+		{
+			return;
+		}
+		
+		Application.logger.info("Purging test cases prior to " + String.valueOf(purgeDays) + " days ago");
+		
+		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.DELETE_TEST_CASE_RESOURCE);
+		
+		Object[] parameters = {				
+				DataUtils.delimitSQLString(String.valueOf(purgeDays)),
+		};
+		
+		// apply the values to the command text
+		MessageFormat mf = new MessageFormat(commandText);
+		
+		parameterizedCommandText = mf.format(parameters);
+				
+		// execute the command
+		DataUtils.executeCommand(parameterizedCommandText, con);		
+		
+	}
+	
 	protected static void writeTest(IConnection con, Scenario sc) throws Exception
 	{
 		

@@ -35,11 +35,13 @@ public class Harness {
 	
 	public List<Scenario> getMatchScenarios()
 	{
+				
+		boolean includeOnlyActive = false;
 		
-		// if there are no filters then return all scenarios
-		if(ScenarioFilterList.size() == 0 || TagList.size() == 0)
+		// if there are no filters then return all active scenarios
+		if(ScenarioFilterList.size() == 0 && TagList.size() == 0)
 		{
-			return this.Scenarios;
+			includeOnlyActive = true;
 		}
 						
 		List<Scenario> matchList = new ArrayList<Scenario>();
@@ -50,24 +52,30 @@ public class Harness {
 		{
 			// reset the include flag
 			includeScenario = false;
+			
+			if(includeOnlyActive == true && sc.activeFlag == true)
+			{
+				// add the scenario to the list
+				matchList.add(sc);
+				continue;
+			}
 		
 			// include if the identifier is in the list
 			if(ScenarioFilterList.contains(sc.identifier))
 			{
-				includeScenario = true;
+				// add the scenario to the list
+				matchList.add(sc);
+				continue;
 			}
 			
 			// include if one of the tags match
 			if(includeScenario == false && DataUtils.listsIntersect(sc.Tags, TagList))
 			{
-				includeScenario = true;
-			}
-			
-			// add to the match list
-			if(includeScenario == true)
-			{
+				// add the scenario to the list
 				matchList.add(sc);
-			}			
+				continue;
+			}
+						
 		}
 		
 		return matchList;		
