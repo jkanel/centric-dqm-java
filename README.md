@@ -1,4 +1,4 @@
-# centric-dqm
+# centric-dqm-java
 
 
 Centric Data Quality Monitoring
