@@ -483,4 +483,16 @@ public class Scenario {
 		return null;
 	}
 	
+	public void dispose()
+	{
+		this.TestCases.clear();
+		
+		this.TestCases = null;
+		this.actualQuery = null;
+		this.expectedQuery = null;		
+		this.actualConnection = null;
+		this.expectedConnection = null;
+				
+	}
+	
 }

@@ -1,0 +1,2 @@
+SELECT CURRENT_TIMESTAMP AS current_dt
+;

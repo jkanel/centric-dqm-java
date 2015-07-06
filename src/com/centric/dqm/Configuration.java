@@ -22,8 +22,11 @@ import org.apache.commons.io.FileUtils;
 public class Configuration {
 	
 	public final static String CONFIG_FILENAME = "com.centric.dqm.properties";
+	public final static String MAXROWS_PROPERTY = "maxrows";
 	
 	public static IConnection Connection;
+	
+	public static int maxResultsetRows = 0;
 	
 	public Configuration() throws IOException, SQLException, URISyntaxException
 	{
@@ -51,10 +54,29 @@ public class Configuration {
 			throw new FileNotFoundException("The configuration file \"" + Configuration.CONFIG_FILENAME + "\" not found in the classpath.");
 		}
  
-		// compare the driver with connection drivers	
-		String driver = prop.getProperty("driver");
+		Configuration.Connection = DataUtils.getConnection(prop);	
 		
-		Configuration.Connection = DataUtils.getConnectionFromDriver(driver, prop);		
+		// get max rows property
+		try
+		{
+			Configuration.maxResultsetRows = Integer.parseInt(prop.getProperty(Configuration.MAXROWS_PROPERTY));
+		}
+		catch (Exception e)
+		{
+			Configuration.maxResultsetRows = 0;
+		}
+		finally
+		{
+			if(Configuration.maxResultsetRows < 0)
+			{
+				Configuration.maxResultsetRows = 0;
+			}
+		}
+		
+		
+		
+		
+		
 	}	
 		
 	

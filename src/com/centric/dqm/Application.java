@@ -12,6 +12,7 @@ import com.centric.dqm.data.DataUtils;
 import com.centric.dqm.data.HarnessReader;
 import com.centric.dqm.data.HarnessWriter;
 import com.centric.dqm.testing.Harness;
+import com.centric.dqm.testing.Scenario;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -136,30 +137,29 @@ public class Application {
 
     	// #################################################
     	logger.info("Performing tests");    	
+    	
     	try
     	{
 
-    		harness.perfomTests();
+    		for(Scenario sc : harness.getMatchScenarios())
+    		{
+    			
+    			// perform and write the tests
+    			sc.performTest();
+    			HarnessWriter.writeTest(Configuration.Connection, sc);
+    			
+    			// dispose of the scenarios
+    			sc.dispose();
+    			
+    		}
+    		
     		
     	} catch(Exception e)
     	{
     		logger.error("Encountered exception.", e);
     		throw e;
     	}
-    	
-    	// #################################################
-    	try
-    	{
-
-    		HarnessWriter.writeHarness(Configuration.Connection, harness);
-    		
-    	} catch(Exception e)
-    	{
-    		logger.error("Encountered exception.", e);
-    		throw e;
-    	}    	
-
-    	
+    	    	
     	// #################################################
     	logger.info("Exiting the application");
     	

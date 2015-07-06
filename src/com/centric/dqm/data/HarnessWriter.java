@@ -38,7 +38,7 @@ public class HarnessWriter {
 		
 		Application.logger.info("Purging test cases prior to " + String.valueOf(purgeDays) + " days ago");
 		
-		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.DELETE_TEST_CASE_RESOURCE);
+		commandText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.DELETE_TEST_CASE_RESOURCE);
 		
 		Object[] parameters = {				
 				DataUtils.delimitSQLString(String.valueOf(purgeDays)),
@@ -54,13 +54,13 @@ public class HarnessWriter {
 		
 	}
 	
-	protected static void writeTest(IConnection con, Scenario sc) throws Exception
+	public static void writeTest(IConnection con, Scenario sc) throws Exception
 	{
 		
 		String commandText;
 		String parameterizedCommandText;
 		
-		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.INSERT_TEST_RESOURCE);
+		commandText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.INSERT_TEST_RESOURCE);
 	
 	
 		Application.logger.info("Writing test " + sc.identifier + " results");
@@ -188,7 +188,7 @@ public class HarnessWriter {
 		String commandText;
 		String parameterizedCommandText;
 		
-		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.INSERT_TEST_CASE_RESOURCE);
+		commandText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.INSERT_TEST_CASE_RESOURCE);
 	
 		int maxGrainIndex = tc.Grains.size() - 1;
 		

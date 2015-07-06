@@ -22,7 +22,7 @@ public class HarnessReader {
 		Date currentDate = null;
 		
 		// execute the test for existing tables
-		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.SELECT_CURRENT_DATE_RESOURCE);	
+		commandText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.SELECT_CURRENT_DATE_RESOURCE);	
 		rs = DataUtils.executeCommandWithResult(commandText, con);
 		
 		while(rs.next())
@@ -48,10 +48,10 @@ public class HarnessReader {
 		Measure m;
 		
 		// execute the test for existing tables
-		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.SELECT_SCENARIOS_RESOURCE);	
+		commandText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.SELECT_SCENARIOS_RESOURCE);	
 		srs = DataUtils.executeCommandWithResult(commandText, con);
 		
-		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.SELECT_SCENARIO_MEASURES_RESOURCE);	
+		commandText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.SELECT_SCENARIO_MEASURES_RESOURCE);	
 		smrs = DataUtils.executeCommandWithResult(commandText, con);
 		
 		// push the measure scenarios into a filtered rowset
@@ -66,7 +66,7 @@ public class HarnessReader {
 			
 			sc.identifier = srs.getString("scenario_uid");		
 			
-			sc.actualConnection = DataUtils.getConnectionFromDriver(
+			sc.actualConnection = DataUtils.getConnection(
 					srs.getString("actual_jdbc_driver"), 
 					srs.getString("actual_jdbc_url"), 
 					srs.getString("actual_username"), 
@@ -76,7 +76,7 @@ public class HarnessReader {
 			
 			sc.actualQuery.commandText = srs.getString("actual_command");
 						
-			sc.expectedConnection = DataUtils.getConnectionFromDriver(
+			sc.expectedConnection = DataUtils.getConnection(
 					srs.getString("expected_jdbc_driver"), 
 					srs.getString("expected_jdbc_url"), 
 					srs.getString("expected_username"), 

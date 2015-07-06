@@ -19,7 +19,7 @@ public class Bootstrapper {
 	{
 		String commandText;
 
-		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.BOOTSTRAP_RESOURCE);		
+		commandText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.BOOTSTRAP_RESOURCE);		
 		DataUtils.executeCommand(commandText, con);			
 	
 	}
@@ -30,7 +30,7 @@ public class Bootstrapper {
 		ResultSet rs;
 		
 		// execute the test for existing tables
-		commandText = DataUtils.getScriptResource(con.getScriptResourceFolder(), DataUtils.BOOTSTRAP_VALIDATE_RESOURCE);		
+		commandText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.BOOTSTRAP_VALIDATE_RESOURCE);		
 		rs = DataUtils.executeCommandWithResult(commandText, con);
 		
 		int rowCount = 0;

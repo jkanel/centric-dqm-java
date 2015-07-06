@@ -304,7 +304,7 @@ public class Measure {
 			
 			Double variance = this.getVariance();
 			
-			if (variance == 0.0d)
+			if (variance != null && variance == 0.0d)
 			{
 				this._resultVarianceRate = 0.0d;
 				return this._resultVarianceRate;

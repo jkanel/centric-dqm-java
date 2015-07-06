@@ -15,10 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import com.centric.dqm.data.mysql.MySQLConnection;
-import com.centric.dqm.data.oracle.OracleConnection;
-import com.centric.dqm.data.sqlserver.SqlServerConnection;
-
+import com.centric.dqm.data.generic.GenericConnection;
 
 public class DataUtils {
 	
@@ -31,19 +28,20 @@ public class DataUtils {
 	public static final String DELETE_TEST_CASE_RESOURCE = "delete_test_case.sql";
 	public static final String SELECT_CURRENT_DATE_RESOURCE = "select_current_date.sql";
 	
-	public static final int MAX_RESULTSET_ROWS = 10000;
+	public final static String SQL_SERVER_RESOURCE_FOLDER = "sqlserver";
+	public final static String MYSQL_RESOURCE_FOLDER = "mysql";
+	public final static String ORACLE_RESOURCE_FOLDER = "oracle";
+		
+	public final static String SQL_SERVER_JDBC_DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+	public final static String MYSQL_JDBC_DRIVER = "com.mysql.jdbc.Driver";
+	public final static String ORACLE_JDBC_DRIVER = "oracle.jdbc.OracleDriver";
 	
-	public static Properties getConnectionProperties(String url, String user, String password, int timeout)
-	{
-		Properties prop = new Properties();
-		
-		prop.put("url", url);
-		prop.put("user", user);
-		prop.put("password", password);
-		prop.put("timeout", String.valueOf(timeout));
-		
-		return prop;
-	}
+	public final static String JDBC_DRIVER_PROPERTY = "driver";
+	public final static String JDBC_URL_PROPERTY = "url";
+	public final static String USER_PROPERTY = "user";
+	public final static String PASSWORD_PROPERTY = "password";
+	public final static String TIMEOUT_PROPERTY = "timeout";
+	
 	
 	public static String delimitSQLString(String value)
 	{
@@ -58,34 +56,58 @@ public class DataUtils {
 	}
 	
 	
-	public static IConnection getConnectionFromDriver(String driver, String url, String user, String password, int timeout)
+	public static IConnection getConnection(String driver, String url, String user, String password, int timeout)
 	{
-		return DataUtils.getConnectionFromDriver(driver, DataUtils.getConnectionProperties(url, user, password, timeout));
+		return new GenericConnection(driver, url, user, password, timeout);
+	}
+	
+	public static IConnection getConnection(Properties prop)
+	{
+		
+		int timeout = 0;
+		
+		try
+		{
+			timeout = Integer.parseInt(prop.getProperty(DataUtils.TIMEOUT_PROPERTY));
+		} catch (Exception e)
+		{
+			// no action
+			timeout = 0;			
+		}
+		
+		return new GenericConnection(
+			prop.getProperty(DataUtils.JDBC_DRIVER_PROPERTY).trim(),
+			prop.getProperty(DataUtils.JDBC_URL_PROPERTY).trim(),
+			prop.getProperty(DataUtils.USER_PROPERTY).trim(),
+			prop.getProperty(DataUtils.PASSWORD_PROPERTY).trim(),
+			timeout
+			);
 	}
 	
 
-	public static IConnection getConnectionFromDriver(String driver, Properties properties)
+	public static String getSourceFolderFromDriver(String driver)
 	{
-		if(SqlServerConnection.JDBC_DRIVER.equals(driver))
+		if(DataUtils.SQL_SERVER_JDBC_DRIVER.equals(driver))
 		{
-			return new SqlServerConnection(properties);		
+			return DataUtils.SQL_SERVER_RESOURCE_FOLDER;	
 		}
-		else if (MySQLConnection.JDBC_DRIVER.equals(driver))
+		else if (DataUtils.MYSQL_JDBC_DRIVER.equals(driver))
 		{
-			return new MySQLConnection(properties);			
+			return DataUtils.MYSQL_RESOURCE_FOLDER;		
 		}
-		else if (OracleConnection.JDBC_DRIVER.equals(driver))
+		else if (DataUtils.ORACLE_JDBC_DRIVER.equals(driver))
 		{
-			return new OracleConnection(properties);			
+			return DataUtils.ORACLE_RESOURCE_FOLDER;		
 		}
 		else
 		{
-			throw new IllegalArgumentException("The specified driver \"" + driver + "\" does not correspond to an available database connection.");
+			throw new IllegalArgumentException("The specified driver \"" + driver + "\" does not resolve to a resource folder.");
 		}
 	}
 	
 	public static ResultSet executeCommandWithResult(String commandText, IConnection CurrentConnection)
 	{
+		// no max rows are specified
 		return executeCommandWithResult(commandText, CurrentConnection, 0);
 	}
 	
@@ -266,8 +288,10 @@ public class DataUtils {
 		return false;
 	}
 	
-	public static String getScriptResource(String resourceFolder, String resourceName) throws FileNotFoundException, IOException
+	public static String getScriptResource(String driver, String resourceName) throws FileNotFoundException, IOException
 	{
+		
+		String resourceFolder = DataUtils.getSourceFolderFromDriver(driver);
 		
 		// the resource folder is the relative to the DataUtils package folder path
 		String resourcePath = resourceFolder + "/" + resourceName;
