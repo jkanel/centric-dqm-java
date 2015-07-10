@@ -1,11 +1,15 @@
 package com.centric.dqm.testing;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.centric.dqm.Application;
+import com.centric.dqm.Configuration;
 import com.centric.dqm.data.DataUtils;
+import com.centric.dqm.data.HarnessWriter;
 import com.centric.dqm.data.IConnection;
 
 public class Query {	
@@ -16,6 +20,10 @@ public class Query {
 	public static final String COMMAND_PARAM_CURRENT_YEAR = "<<CURRENT_YEAR>>";
 	public static final String COMMAND_PARAM_MODULUS = "<<MODULUS>>";
 	public static final String COMMAND_PARAM_MODULARITY = "<<MODULARITY>>";
+	public static final String IMPORT_DIRECTIVE = "@import";
+	
+	public Scenario parent;
+	public String scenarioMode; 
 	
 	public String errorMessage;
 	public Integer errorNumber;
@@ -36,6 +44,10 @@ public class Query {
 		
 		try
 		{
+			
+			// optionally resolve the query from a file
+			resolveCommandFromFile();
+			
 			String parameterizeCommandText = Query.parameterizeCommandText(this.commandText, modulus, modularity);		
 			return connection.executeCommandWithResult(parameterizeCommandText);
 				
@@ -45,6 +57,59 @@ public class Query {
 			Application.logger.error(Application.getExceptionStackTrace(e));
 			
 			return null;
+		}
+		
+	}
+	
+	protected void resolveCommandFromFile() throws IOException, URISyntaxException
+	{	
+		if(this.commandText != null)
+		{
+			// determine if length is greater than a file path length
+			if(this.commandText.length() > 260)
+			{
+				// exit the method, command is not a file path
+				return;
+			}
+			
+			String filePath = this.commandText;
+			String filePathRelative = Application.getJarFullyQualifiedPath(this.commandText);
+			String contents = null;			
+			
+			// determine if the current command is a valid file path
+			if(Application.fileExists(filePathRelative))
+			{				
+				contents = Application.getFileContents(filePathRelative);
+				
+				// set the file path for future use
+				filePath = filePathRelative;
+								
+			} else if (Application.fileExists(filePath))
+			{
+				contents = Application.getFileContents(filePath);
+				
+			} else
+			{
+				// exit the method, assumes the command is a valid query
+				return;
+			}
+			
+			// if the contents start with the import directive
+			// import the query text into the table.
+			if(contents.startsWith(Query.IMPORT_DIRECTIVE))
+			{
+				this.commandText = contents.substring(Query.IMPORT_DIRECTIVE.length()).trim();
+				HarnessWriter.updateQueryCommand(Configuration.Connection, this.parent, this.scenarioMode, this.commandText);
+								
+				String targetFilePath = Application.getRelativeFilePath(filePath, "imported", Application.getFileName(filePath));
+				Application.moveFile(filePath, targetFilePath, true,true);
+				
+				
+			} else
+			{
+				this.commandText = contents;
+			}
+								
 		}
 		
 	}

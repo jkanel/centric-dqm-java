@@ -1,5 +1,7 @@
 package com.centric.dqm.data;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 
@@ -50,6 +52,7 @@ public class HarnessWriter {
 		parameterizedCommandText = mf.format(parameters);
 				
 		// execute the command
+		// allow parsing
 		DataUtils.executeCommand(parameterizedCommandText, con);		
 		
 	}
@@ -324,6 +327,30 @@ public class HarnessWriter {
 			DataUtils.executeCommand(parameterizedCommandText, con);
 		
 		}
+	}
+	
+		
+	public static void updateQueryCommand(IConnection con, Scenario sc, String scenarioMode, String commandText) throws FileNotFoundException, IOException
+	{
+		
+		String resourceText = null;		
+		resourceText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.UPDATE_SCENARIO_QUERY);		
+		
+		Object[] parameters = {				
+		  DataUtils.delimitSQLString(sc.identifier),
+		  scenarioMode,
+		  DataUtils.delimitSQLString(commandText)
+		};
+		
+		// apply the values to the command text
+		MessageFormat mf = new MessageFormat(resourceText);		
+		String parameterizedCommandText = mf.format(parameters);
+				
+		// execute the command
+		// Suppress parsing due to unknown contents of commandText 
+		DataUtils.executeCommand(parameterizedCommandText, con, null);
+		
+		
 	}
 
 }

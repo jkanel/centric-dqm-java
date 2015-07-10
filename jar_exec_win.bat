@@ -8,4 +8,4 @@ REM #### -p {Age (days) after which test cases are purged}
 
 REM ###############################
 
-java -jar "com.centric.dqm.jar" -p 20
+java -jar "com.centric.dqm.jar" -p 20 -t "CAP,ABC" -s "TEST1,TEST2"

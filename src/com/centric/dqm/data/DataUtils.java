@@ -27,6 +27,7 @@ public class DataUtils {
 	public static final String INSERT_TEST_CASE_RESOURCE = "insert_test_case.sql";
 	public static final String DELETE_TEST_CASE_RESOURCE = "delete_test_case.sql";
 	public static final String SELECT_CURRENT_DATE_RESOURCE = "select_current_date.sql";
+	public static final String UPDATE_SCENARIO_QUERY = "update_scenario_query.sql";
 	
 	public final static String SQL_SERVER_RESOURCE_FOLDER = "sqlserver";
 	public final static String MYSQL_RESOURCE_FOLDER = "mysql";
@@ -105,53 +106,46 @@ public class DataUtils {
 		}
 	}
 	
-	public static ResultSet executeCommandWithResult(String commandText, IConnection CurrentConnection)
+	public static ResultSet executeCommandWithResult(String commandText, IConnection CurrentConnection) throws Exception
 	{
 		// no max rows are specified
 		return executeCommandWithResult(commandText, CurrentConnection, 0);
 	}
 	
-	public static ResultSet executeCommandWithResult(String commandText, IConnection CurrentConnection, int maxRows)
+	public static ResultSet executeCommandWithResult(String commandText, IConnection CurrentConnection, int maxRows) throws Exception
 	{
 
 	    // Declare the JDBC objects.
 	    Connection con = null;
 	    Statement stmt = null;
 	    ResultSet rs = null;
-	
-	    try 
-	    {
-	       // Establish the connection.
-	       Class.forName(CurrentConnection.getJdbcDriver());
-	       
-	       String url = CurrentConnection.getConnectionUrl();
-	       String user = CurrentConnection.getConnectionUser();
-	       String password = CurrentConnection.getConnectionPassword();
-	       	       
-	       con = DriverManager.getConnection(url, user, password);
-	
-	       // Create and execute an SQL statement that returns some data.
-	       stmt = con.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
-	       
-	       if(maxRows > 0)
-	       {
-	    	   stmt.setMaxRows(maxRows);
-	       }
-	       
-	       
-	       // set the query timeout if applicable
-	       if(CurrentConnection.getConnectionTimeout() > 0)
-	       {
-	    	   stmt.setQueryTimeout(CurrentConnection.getConnectionTimeout());
-	       }
-	       
-	       rs = stmt.executeQuery(commandText.trim());
+
+       // Establish the connection.
+       Class.forName(CurrentConnection.getJdbcDriver());
+       
+       String url = CurrentConnection.getConnectionUrl();
+       String user = CurrentConnection.getConnectionUser();
+       String password = CurrentConnection.getConnectionPassword();
+       	       
+       con = DriverManager.getConnection(url, user, password);
+
+       // Create and execute an SQL statement that returns some data.
+       stmt = con.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+       
+       if(maxRows > 0)
+       {
+    	   stmt.setMaxRows(maxRows);
+       }
+       
+       
+       // set the query timeout if applicable
+       if(CurrentConnection.getConnectionTimeout() > 0)
+       {
+    	   stmt.setQueryTimeout(CurrentConnection.getConnectionTimeout());
+       }
+       
+       rs = stmt.executeQuery(commandText.trim());
 	       	
-	    }
-	    catch (Exception e)
-	    {
-	       e.printStackTrace();
-	    }
 	    
 	    return rs;
 
@@ -204,6 +198,11 @@ public class DataUtils {
 	
 	public static void executeCommand(String commandText, IConnection CurrentConnection)
 	{
+		executeCommand(commandText, CurrentConnection, ";");
+	}
+	
+	public static void executeCommand(String commandText, IConnection CurrentConnection, String parseChar)
+	{
 
 	    // Declare the JDBC objects.
 	    Connection con = null;
@@ -223,14 +222,26 @@ public class DataUtils {
 	       // Create and execute an SQL statement that returns some data.
 	       stmt = con.createStatement();
 	       
-	       List<String> commandTextList = new ArrayList<String>(Arrays.asList(commandText.split(";")));
-	       
-	       for(String commandTextSegment : commandTextList)
+	       // if no parsing character is provided, directly execute the command
+	       if(parseChar == null)
 	       {
-	       
-	    	   stmt.execute(commandTextSegment.trim());
+	    	   stmt.execute(commandText.trim());
 	    	   con.commit();
+	    	   
+	       // otherwise parse into multiple commands
+	       } else
+	       {	    	
+	    	   
+	    	   List<String> commandTextList = new ArrayList<String>(Arrays.asList(commandText.split(parseChar)));
+	    	   
+	    	   for(String commandTextSegment : commandTextList)
+		       {
+		       
+		    	   stmt.execute(commandTextSegment.trim());
+		    	   con.commit();
+		       }	    	   
 	       }
+	       
 	       	
 	    }
 	    catch (Exception e)

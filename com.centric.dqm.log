@@ -1,37 +1,32 @@
-2015-07-05 21:00:21.737 - Entering application
-2015-07-05 21:00:21.739 - Interpreting command line parameters
-2015-07-05 21:00:21.739 - Tags: (not specified)
-2015-07-05 21:00:21.739 - Scenarios: (not specified)
-2015-07-05 21:00:21.740 - Checking that management database exists at
-2015-07-05 21:00:22.652 - Initiating testing harness
-2015-07-05 21:00:22.848 - Performing tests
-2015-07-05 21:00:22.875 - Testing scenario "CAP_GL1" (6029660f-9cdc-4213-a1e0-c60257a4c961).
-2015-07-05 21:00:24.682 - Adding "CAP_GL1" metadata "net_amt".
-2015-07-05 21:00:24.683 - Adding "CAP_GL1" metadata "income_amt".
-2015-07-05 21:00:24.684 - Adding "CAP_GL1" metadata "expense_amt".
-2015-07-05 21:00:24.685 - Adding "CAP_GL1" metadata "net_expense_amt".
-2015-07-05 21:00:24.686 - Adding "CAP_GL1" metadata "net_revenue_amt".
-2015-07-05 21:00:24.686 - Adding "CAP_GL1" metadata "cogs_amt".
-2015-07-05 21:00:24.687 - Adding "CAP_GL1" metadata "net_cogs_amt".
-2015-07-05 21:00:24.687 - Adding "CAP_GL1" metadata "reimb_expense_income_amt".
-2015-07-05 21:00:24.688 - Adding "CAP_GL1" metadata "reimb_expense_cost_amt".
-2015-07-05 21:00:24.689 - Adding "CAP_GL1" metadata "employee_cost_amt".
-2015-07-05 21:00:24.689 - Adding "CAP_GL1" metadata "contractor_cost_amt".
-2015-07-05 21:00:24.690 - Adding "CAP_GL1" metadata "w2t_cost_amt".
-2015-07-05 21:00:24.691 - Adding "CAP_GL1" metadata "gross_profit_amt".
-2015-07-05 21:00:24.692 - Adding "CAP_GL1" metadata "non_cogs_amt".
-2015-07-05 21:00:24.693 - Adding "CAP_GL1" metadata "net_profit_amt".
-2015-07-05 21:00:24.694 - Adding "CAP_GL1" metadata "centric_cost_amt".
-2015-07-05 21:00:24.695 - Adding "CAP_GL1" metadata "centric_cost_transfer_amt".
-2015-07-05 21:00:24.696 - Adding "CAP_GL1" metadata "net_centric_cost_amt".
-2015-07-05 21:00:24.697 - Adding "CAP_GL1" metadata "bu_cost_amt".
-2015-07-05 21:00:24.699 - Adding "CAP_GL1" metadata "operating_profit_amt".
-2015-07-05 21:00:24.700 - Adding "CAP_GL1" metadata "shared_profit_transfer_amt".
-2015-07-05 21:00:27.927 - Writing test CAP_GL1 results
-2015-07-05 21:01:14.146 - Testing scenario "TEST1" (289f31b1-bb24-4bb5-8550-fc6a5cc6bc7b).
-2015-07-05 21:01:14.221 - Adding "TEST1" metadata "order_count".
-2015-07-05 21:01:14.221 - Adding "TEST1" metadata "sales".
-2015-07-05 21:01:14.222 - Adding "TEST1" metadata "max_order_number".
-2015-07-05 21:01:14.222 - Adding "TEST1" metadata "min_order_date".
-2015-07-05 21:01:14.355 - Writing test TEST1 results
-2015-07-05 21:01:15.368 - Exiting the application
+15-07-10 13:17:00.771 - Entering application
+15-07-10 13:17:00.773 - Interpreting command line parameters
+15-07-10 13:17:00.773 - Tags: (not specified)
+15-07-10 13:17:00.773 - Scenarios: TEST1
+15-07-10 13:17:00.773 - Checking that management database exists
+15-07-10 13:17:01.388 - Purging test cases prior to 30 days ago
+15-07-10 13:17:01.403 - Importing scenarios...
+15-07-10 13:17:01.404 - Initiating testing harness
+15-07-10 13:17:01.459 - Performing tests
+15-07-10 13:17:01.469 - Testing scenario "TEST1" (3e699eb2-0e42-4acf-9030-8896f84c0bfc).
+15-07-10 13:17:01.481 - com.microsoft.sqlserver.jdbc.SQLServerException: Incorrect syntax near 'expected'.
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:216)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1515)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.doExecuteStatement(SQLServerStatement.java:792)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement$StmtExecCmd.doExecute(SQLServerStatement.java:689)
+	at com.microsoft.sqlserver.jdbc.TDSCommand.execute(IOBuffer.java:5696)
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.executeCommand(SQLServerConnection.java:1715)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeCommand(SQLServerStatement.java:180)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeStatement(SQLServerStatement.java:155)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeQuery(SQLServerStatement.java:616)
+	at com.centric.dqm.data.DataUtils.executeCommandWithResult(DataUtils.java:147)
+	at com.centric.dqm.data.generic.GenericConnection.executeCommandWithResult(GenericConnection.java:56)
+	at com.centric.dqm.testing.Query.execute(Query.java:52)
+	at com.centric.dqm.testing.Scenario.performTest(Scenario.java:102)
+	at com.centric.dqm.Application.main(Application.java:158)
+
+15-07-10 13:17:01.481 - java.lang.NullPointerException
+	at com.centric.dqm.testing.Scenario.performTest(Scenario.java:106)
+	at com.centric.dqm.Application.main(Application.java:158)
+
+15-07-10 13:17:01.483 - Writing test TEST1 results
+15-07-10 13:17:01.497 - Exiting the application

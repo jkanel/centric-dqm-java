@@ -1,6 +1,9 @@
 package com.centric.dqm;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -19,6 +22,8 @@ import org.apache.logging.log4j.LogManager;
 
 public class Application {
 	
+	static final String fileSeparator = System.getProperty("file.separator");
+	
 	public static final Logger logger = LogManager.getLogger();
 	
 	public static void main(String[] args) throws Exception
@@ -26,11 +31,11 @@ public class Application {
 		
     	/*
     	 * -c "{Configuration File Path (String)}"
-    	 * -t "{Tag (String)}"
-    	 * -s "{Scenario Identifier (String)}"
-    	 * -p "{Number of days before which test cases will be purged} 
+    	 * -t "{Tag (String, Comma Delimited)}"
+    	 * -s "{Scenario Identifier (String, Comma Delimited)}"
+    	 * -p {Age (days) after which test cases are purged} 
     	 */
-
+		
 		// #################################################
         logger.info("Entering application");
 		
@@ -81,7 +86,7 @@ public class Application {
     	logger.info("Scenarios: " + ((scenarioIdentifiers == null || scenarioIdentifiers.length()==0) ? "(not specified)" : scenarioIdentifiers));
     	
     	// #################################################
-    	logger.info("Checking that management database exists at");
+    	logger.info("Checking that management database exists");
     	
     	try
     	{
@@ -97,7 +102,9 @@ public class Application {
     			Bootstrapper.bootstrap(Configuration.Connection);
     			
     			logger.info("Management database has been created");
-    			logger.info("Exiting the application");    			
+    			logger.info("Exiting the application"); 
+    			
+    			// exit the application
     			return;
     			
     		} else if (purgeDays != null)
@@ -113,6 +120,9 @@ public class Application {
 
     		throw e;
     	}
+    	
+    	// #################################################
+    	logger.info("Importing scenarios..."); 
     	
     	// #################################################
     	logger.info("Initiating testing harness");    	
@@ -203,6 +213,211 @@ public class Application {
 			return trace.toString().substring(0, maxLength - 1);
 		}
 		
+	}
+	
+	public static boolean fileExists(String filePath)
+	{
+		try
+		{
+			File f = new File(filePath);
+			return (f.isFile());
+			
+		} catch (Exception e)
+		{
+			// do nothing
+		}
+		
+		return false;
+		
+	}
+	
+	public static boolean directoryExists(String path)
+	{
+		try
+		{
+			File f = new File(path);
+			return (f.isDirectory());
+			
+		} catch (Exception e)
+		{
+			// do nothing
+		}
+		
+		return false;
+		
+	}
+	
+	
+	public static String getJarFullyQualifiedPath(String relativePath) throws UnsupportedEncodingException, URISyntaxException
+	{
+		String fileSeparator =  System.getProperty("file.separator");
+		
+		if(relativePath.startsWith(fileSeparator))
+		{
+			return Application.getJarPath() + relativePath;
+			
+		} else
+		{
+			return Application.getJarPath() + fileSeparator + relativePath;
+		}
+	
+	}
+
+	
+	public static String getRelativePath(String relativePath) throws UnsupportedEncodingException, URISyntaxException
+	{
+		String fileSeparator =  System.getProperty("file.separator");
+		
+		if(relativePath.startsWith(fileSeparator))
+		{
+			return Application.getJarPath() + relativePath;
+			
+		} else
+		{
+			return Application.getJarPath() + fileSeparator + relativePath;
+		}
+	
+	}
+	
+	public static String getDirectoryPath(String filePath)
+	{
+
+		try
+		{
+			File f = new File(filePath);
+			if(f.isDirectory())
+			{
+
+				return filePath;
+				
+			} else	
+			{
+				String p = f.getParentFile().getPath();
+				return p;
+			}
+			
+		} catch (Exception e)
+		{
+			// do nothing
+		}
+		
+		return null;
+	}
+	
+	public static String getFileName(String filePath)
+	{
+		String fileName = null;
+		
+		try
+		{
+			File f = new File(filePath);
+			if(f.isFile())
+			{
+				fileName = f.getName();
+			}
+			
+		} catch (Exception e)
+		{
+			// do nothing
+		}
+		
+		return fileName;
+	}
+	
+
+	public static String getRelativeFilePath(String originalFilePath, String newRelativePath)
+	{
+		String fileName= Application.getFileName(originalFilePath);
+		return Application.getRelativeFilePath(originalFilePath, newRelativePath, fileName);
+		
+	}
+	
+	public static String getRelativeFilePath(String originalFilePath, String newRelativePath, String newFileName)
+	{
+		String directoryPath = Application.getDirectoryPath(originalFilePath);
+		
+		File d = new File(directoryPath);
+		File f = null;
+		
+		if(newRelativePath == null)
+		{
+			f = new File(d, newFileName);
+			
+		} else
+		{
+			f = new File(d, newRelativePath + System.getProperty("file.separator") + newFileName);
+		}
+		
+		return f.getPath();
+		
+	}
+	
+	public static String getFileContents(String filePath) throws IOException 
+	{
+	    BufferedReader reader = null;
+	    String line = null;
+	    StringBuilder stringBuilder = new StringBuilder();
+	    	    
+	    try
+	    {
+	    	reader = new BufferedReader( new FileReader (filePath));
+	   		    
+		    String ls = System.getProperty("line.separator");
+	
+		    while ((line = reader.readLine()) != null ) {
+		        stringBuilder.append(line);
+		        stringBuilder.append(ls);
+		    }
+		    
+	    } finally
+	    {
+	    	if(reader != null)
+	    	{
+	    		reader.close();
+	    	}
+	    }
+
+	    return stringBuilder.toString().trim();
+	}
+	
+	public static void moveFile(String sourceFilePath, String targetFilePath, boolean replaceExisting, boolean assertTargetDirectoryExists)
+	{
+		File sf = new File(sourceFilePath);
+		File tf = new File(targetFilePath);
+		
+		if(Application.fileExists(targetFilePath) && replaceExisting)
+		{
+			if(replaceExisting)
+			{
+				tf.delete();
+			} else
+			{
+				throw new IllegalStateException("The target file \"" + targetFilePath + "\" already exists.");
+			}
+		}
+		
+		if(assertTargetDirectoryExists)
+		{
+			Application.assertDirectoryExists(targetFilePath);
+		}
+		
+		sf.renameTo(tf);
+		
+	}
+	
+	public static void assertDirectoryExists(String targetPath)
+	{
+		String directoryPath = Application.getDirectoryPath(targetPath);
+		
+		if(Application.directoryExists(directoryPath))
+		{
+			return;
+			
+		} else
+		{
+			File d = new File(directoryPath);			
+			d.mkdirs();
+		}
 	}
 	    
 }

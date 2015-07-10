@@ -2,6 +2,8 @@ USE [dqm]
 GO
 
 -- drop table dqm.scenario
+-- select * from dqm.test order by test_index desc
+-- select * from dqm.test_case
 
 
 /* ############################################### */
@@ -74,7 +76,8 @@ DECLARE
   @act VARCHAR(max) = null
 , @exp VARCHAR(max) = null;
 
-SET @exp = 'dbo.dqm_test @modulus=<<MODULUS>>, @modularity=<<MODULARITY>>;'
+--SET @exp = 'dbo.dqm_test @modulus=<<MODULUS>>, @modularity=<<MODULARITY>>;'
+SET @exp = 'scripts\expected\test1.sql'
 
 /*
 'SELECT
@@ -106,7 +109,8 @@ ORDER BY
 , sp.StateProvinceCode';
 */
 
-SET @act = 'SELECT
+SET @act = '
+SELECT
 YEAR(s.OrderDate) AS year
 , MONTH(s.OrderDate) AS month
 , g.StateProvinceCode AS state
@@ -131,7 +135,8 @@ GROUP BY
 ORDER BY
   YEAR(s.OrderDate)
 , MONTH(s.OrderDate)
-, g.StateProvinceCode'
+, g.StateProvinceCode
+';
 
 INSERT INTO [dqm].[scenario]
            ([scenario_uid]

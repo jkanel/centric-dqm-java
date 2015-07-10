@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class Bootstrapper {
 	
-	public static void assertBootstrap(IConnection con) throws FileNotFoundException, IOException, SQLException
+	public static void assertBootstrap(IConnection con) throws Exception
 	{
 		if(Bootstrapper.isBootstrapped(con) == false)
 		{
@@ -24,7 +24,7 @@ public class Bootstrapper {
 	
 	}
 	
-	public static boolean isBootstrapped(IConnection con) throws FileNotFoundException, IOException, SQLException
+	public static boolean isBootstrapped(IConnection con) throws Exception
 	{
 		String commandText;
 		ResultSet rs;

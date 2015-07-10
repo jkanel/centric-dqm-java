@@ -51,13 +51,13 @@ public class GenericConnection implements IConnection {
 	}
 
 	@Override
-	public ResultSet executeCommandWithResult(String commandText) {
+	public ResultSet executeCommandWithResult(String commandText) throws Exception {
 		// TODO Auto-generated method stub
 		return DataUtils.executeCommandWithResult(commandText, this, Configuration.maxResultsetRows);
 	}
 
 	@Override
-	public void executeCommand(String commandText) {
+	public void executeCommand(String commandText) throws Exception {
 		// TODO Auto-generated method stub
 		DataUtils.executeCommand(commandText, this);
 		

@@ -10,8 +10,8 @@ public interface IConnection {
 	public int getConnectionTimeout();
 	public String getConnectionUrl();
 	
-	public ResultSet executeCommandWithResult(String commandText);
-	public void executeCommand(String commandText);
+	public ResultSet executeCommandWithResult(String commandText) throws Exception;
+	public void executeCommand(String commandText) throws Exception;
 	
 	
 	

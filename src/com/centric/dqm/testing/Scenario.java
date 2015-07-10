@@ -54,6 +54,15 @@ public class Scenario {
 	
 	public List<String> Tags = new ArrayList<String>();
 	
+	public Scenario()
+	{
+		this.actualQuery.parent = this;
+		this.actualQuery.scenarioMode = "actual";
+		
+		this.expectedQuery.parent = this;
+		this.expectedQuery.scenarioMode = "expected";
+	}
+	
 	public String getTestGuid() {
 		return testGuid;
 	}
@@ -80,6 +89,7 @@ public class Scenario {
 			
 			Application.logger.error(Application.getExceptionStackTrace(this.testException));
 			
+			this.testFailureFlag = true;			
 			return;
 		}
 		
@@ -111,6 +121,12 @@ public class Scenario {
 			// dispose of the resultset
 			DataUtils.disposeResulset(ers);			
 		}
+		
+		if(testFailureFlag)
+		{
+			// exit if there is an error
+			return;
+		}
 
 		
 		// process the actual query
@@ -141,6 +157,8 @@ public class Scenario {
 			// dispose of the resultset
 			DataUtils.disposeResulset(ars);			
 		}
+		
+		return;
 	}
 	
 	/**

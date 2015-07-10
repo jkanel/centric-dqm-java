@@ -32,7 +32,7 @@ CREATE TABLE dqm.scenario (
 , expected_command varchar(max)
 , actual_connection_uid varchar(200)
 , actual_command varchar(max)
-, case_failure_record_limit int NOT NULL DEFAULT 100 -- number of success values to preserve
+, case_failure_record_limit int NOT NULL DEFAULT 10000 -- number of success values to preserve
 , case_success_record_limit int NOT NULL DEFAULT 0  -- number of success values to preserve
 , allowed_case_failure_rate float NOT NULL DEFAULT 0.0  -- number of results allowed to fail
 , flexible_null_equality_flag CHAR(1)
