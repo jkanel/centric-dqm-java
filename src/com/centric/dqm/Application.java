@@ -351,34 +351,7 @@ public class Application {
 		return f.getPath();
 		
 	}
-	
-	public static String getFileContents(String filePath) throws IOException 
-	{
-	    BufferedReader reader = null;
-	    String line = null;
-	    StringBuilder stringBuilder = new StringBuilder();
-	    	    
-	    try
-	    {
-	    	reader = new BufferedReader( new FileReader (filePath));
-	   		    
-		    String ls = System.getProperty("line.separator");
-	
-		    while ((line = reader.readLine()) != null ) {
-		        stringBuilder.append(line);
-		        stringBuilder.append(ls);
-		    }
-		    
-	    } finally
-	    {
-	    	if(reader != null)
-	    	{
-	    		reader.close();
-	    	}
-	    }
 
-	    return stringBuilder.toString().trim();
-	}
 	
 	public static void moveFile(String sourceFilePath, String targetFilePath, boolean replaceExisting, boolean assertTargetDirectoryExists)
 	{
@@ -420,4 +393,33 @@ public class Application {
 		}
 	}
 	    
+	
+	public static String getFileContents(String filePath) throws IOException 
+	{
+	    BufferedReader reader = null;
+	    String line = null;
+	    StringBuilder stringBuilder = new StringBuilder();
+	    	    
+	    try
+	    {
+	    	reader = new BufferedReader( new FileReader (filePath));
+	   		    
+		    String ls = System.getProperty("line.separator");
+	
+		    while ((line = reader.readLine()) != null ) {
+		        stringBuilder.append(line);
+		        stringBuilder.append(ls);
+		    }
+		    
+	    } finally
+	    {
+	    	if(reader != null)
+	    	{
+	    		reader.close();
+	    	}
+	    }
+
+	    return stringBuilder.toString().trim();
+	}
+	
 }

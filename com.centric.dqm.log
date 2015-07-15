@@ -1,14 +1,14 @@
-15-07-10 13:17:00.771 - Entering application
-15-07-10 13:17:00.773 - Interpreting command line parameters
-15-07-10 13:17:00.773 - Tags: (not specified)
-15-07-10 13:17:00.773 - Scenarios: TEST1
-15-07-10 13:17:00.773 - Checking that management database exists
-15-07-10 13:17:01.388 - Purging test cases prior to 30 days ago
-15-07-10 13:17:01.403 - Importing scenarios...
-15-07-10 13:17:01.404 - Initiating testing harness
-15-07-10 13:17:01.459 - Performing tests
-15-07-10 13:17:01.469 - Testing scenario "TEST1" (3e699eb2-0e42-4acf-9030-8896f84c0bfc).
-15-07-10 13:17:01.481 - com.microsoft.sqlserver.jdbc.SQLServerException: Incorrect syntax near 'expected'.
+15-07-15 12:56:18.374 - Entering application
+15-07-15 12:56:18.375 - Interpreting command line parameters
+15-07-15 12:56:18.376 - Tags: (not specified)
+15-07-15 12:56:18.376 - Scenarios: TEST1
+15-07-15 12:56:18.376 - Checking that management database exists
+15-07-15 12:56:18.900 - Purging test cases prior to 30 days ago
+15-07-15 12:56:18.911 - Importing scenarios...
+15-07-15 12:56:18.911 - Initiating testing harness
+15-07-15 12:56:18.953 - Performing tests
+15-07-15 12:56:18.964 - Testing scenario "TEST1" (bd04458e-403a-45b3-bfb5-0b2e02050a18).
+15-07-15 12:56:18.975 - com.microsoft.sqlserver.jdbc.SQLServerException: Incorrect syntax near 'expected'.
 	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:216)
 	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1515)
 	at com.microsoft.sqlserver.jdbc.SQLServerStatement.doExecuteStatement(SQLServerStatement.java:792)
@@ -24,9 +24,9 @@
 	at com.centric.dqm.testing.Scenario.performTest(Scenario.java:102)
 	at com.centric.dqm.Application.main(Application.java:158)
 
-15-07-10 13:17:01.481 - java.lang.NullPointerException
+15-07-15 12:56:18.976 - java.lang.NullPointerException
 	at com.centric.dqm.testing.Scenario.performTest(Scenario.java:106)
 	at com.centric.dqm.Application.main(Application.java:158)
 
-15-07-10 13:17:01.483 - Writing test TEST1 results
-15-07-10 13:17:01.497 - Exiting the application
+15-07-15 12:56:18.977 - Writing test TEST1 results
+15-07-15 12:56:18.988 - Exiting the application
