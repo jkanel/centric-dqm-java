@@ -28,7 +28,7 @@ public class Application {
 	
 	public static void main(String[] args) throws Exception
 	{
-		
+	
     	/*
     	 * -c "{Configuration File Path (String)}"
     	 * -t "{Tag (String, Comma Delimited)}"
@@ -38,7 +38,7 @@ public class Application {
 		
 		// #################################################
         logger.info("Entering application");
-		
+
         // #################################################
         logger.info("Interpreting command line parameters"); 
     	
@@ -264,7 +264,7 @@ public class Application {
 	}
 
 	
-	public static String getRelativePath(String relativePath) throws UnsupportedEncodingException, URISyntaxException
+	public static String getJarRelativePath(String relativePath) throws UnsupportedEncodingException, URISyntaxException
 	{
 		String fileSeparator =  System.getProperty("file.separator");
 		
@@ -342,6 +342,10 @@ public class Application {
 		if(newRelativePath == null)
 		{
 			f = new File(d, newFileName);
+			
+		} else if (newFileName == null)
+		{
+			f = new File(d, newRelativePath);
 			
 		} else
 		{

@@ -1,32 +1,32 @@
-15-07-15 12:56:18.374 - Entering application
-15-07-15 12:56:18.375 - Interpreting command line parameters
-15-07-15 12:56:18.376 - Tags: (not specified)
-15-07-15 12:56:18.376 - Scenarios: TEST1
-15-07-15 12:56:18.376 - Checking that management database exists
-15-07-15 12:56:18.900 - Purging test cases prior to 30 days ago
-15-07-15 12:56:18.911 - Importing scenarios...
-15-07-15 12:56:18.911 - Initiating testing harness
-15-07-15 12:56:18.953 - Performing tests
-15-07-15 12:56:18.964 - Testing scenario "TEST1" (bd04458e-403a-45b3-bfb5-0b2e02050a18).
-15-07-15 12:56:18.975 - com.microsoft.sqlserver.jdbc.SQLServerException: Incorrect syntax near 'expected'.
-	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:216)
-	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1515)
-	at com.microsoft.sqlserver.jdbc.SQLServerStatement.doExecuteStatement(SQLServerStatement.java:792)
-	at com.microsoft.sqlserver.jdbc.SQLServerStatement$StmtExecCmd.doExecute(SQLServerStatement.java:689)
-	at com.microsoft.sqlserver.jdbc.TDSCommand.execute(IOBuffer.java:5696)
-	at com.microsoft.sqlserver.jdbc.SQLServerConnection.executeCommand(SQLServerConnection.java:1715)
-	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeCommand(SQLServerStatement.java:180)
-	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeStatement(SQLServerStatement.java:155)
-	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeQuery(SQLServerStatement.java:616)
-	at com.centric.dqm.data.DataUtils.executeCommandWithResult(DataUtils.java:147)
-	at com.centric.dqm.data.generic.GenericConnection.executeCommandWithResult(GenericConnection.java:56)
-	at com.centric.dqm.testing.Query.execute(Query.java:52)
-	at com.centric.dqm.testing.Scenario.performTest(Scenario.java:102)
-	at com.centric.dqm.Application.main(Application.java:158)
-
-15-07-15 12:56:18.976 - java.lang.NullPointerException
-	at com.centric.dqm.testing.Scenario.performTest(Scenario.java:106)
-	at com.centric.dqm.Application.main(Application.java:158)
-
-15-07-15 12:56:18.977 - Writing test TEST1 results
-15-07-15 12:56:18.988 - Exiting the application
+2015-07-15 21:32:56.015 - PATH: .\addons
+2015-07-15 21:32:56.017 - Entering application
+2015-07-15 21:32:56.017 - Interpreting command line parameters
+2015-07-15 21:32:56.017 - Tags: CAP,ABC
+2015-07-15 21:32:56.018 - Scenarios: TEST1,TEST2
+2015-07-15 21:32:56.018 - Checking that management database exists
+2015-07-15 21:32:56.832 - Purging test cases prior to 20 days ago
+2015-07-15 21:32:56.906 - Importing scenarios...
+2015-07-15 21:32:56.907 - Initiating testing harness
+2015-07-15 21:32:57.059 - Performing tests
+2015-07-15 21:32:57.095 - Testing scenario "CAP_GL1" (71393832-5d2c-4400-b141-8106e0fe39cc).
+2015-07-15 21:32:58.769 - Adding "CAP_GL1" metadata "net_amt".
+2015-07-15 21:32:58.771 - Adding "CAP_GL1" metadata "income_amt".
+2015-07-15 21:32:58.771 - Adding "CAP_GL1" metadata "expense_amt".
+2015-07-15 21:32:58.772 - Adding "CAP_GL1" metadata "net_expense_amt".
+2015-07-15 21:32:58.773 - Adding "CAP_GL1" metadata "net_revenue_amt".
+2015-07-15 21:32:58.774 - Adding "CAP_GL1" metadata "cogs_amt".
+2015-07-15 21:32:58.775 - Adding "CAP_GL1" metadata "net_cogs_amt".
+2015-07-15 21:32:58.776 - Adding "CAP_GL1" metadata "reimb_expense_income_amt".
+2015-07-15 21:32:58.776 - Adding "CAP_GL1" metadata "reimb_expense_cost_amt".
+2015-07-15 21:32:58.777 - Adding "CAP_GL1" metadata "employee_cost_amt".
+2015-07-15 21:32:58.778 - Adding "CAP_GL1" metadata "contractor_cost_amt".
+2015-07-15 21:32:58.779 - Adding "CAP_GL1" metadata "w2t_cost_amt".
+2015-07-15 21:32:58.780 - Adding "CAP_GL1" metadata "gross_profit_amt".
+2015-07-15 21:32:58.781 - Adding "CAP_GL1" metadata "non_cogs_amt".
+2015-07-15 21:32:58.783 - Adding "CAP_GL1" metadata "net_profit_amt".
+2015-07-15 21:32:58.784 - Adding "CAP_GL1" metadata "centric_cost_amt".
+2015-07-15 21:32:58.785 - Adding "CAP_GL1" metadata "centric_cost_transfer_amt".
+2015-07-15 21:32:58.787 - Adding "CAP_GL1" metadata "net_centric_cost_amt".
+2015-07-15 21:32:58.788 - Adding "CAP_GL1" metadata "bu_cost_amt".
+2015-07-15 21:32:58.790 - Adding "CAP_GL1" metadata "operating_profit_amt".
+2015-07-15 21:32:58.791 - Adding "CAP_GL1" metadata "shared_profit_transfer_amt".
