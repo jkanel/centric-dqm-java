@@ -133,8 +133,8 @@ public class Application {
 
         	harness = new Harness();
         	
-        	harness.ScenarioFilterList = DataUtils.getListFromString(scenarioIdentifiers);
-        	harness.TagList = DataUtils.getListFromString(tags);
+        	harness.ScenarioFilterList = DataUtils.getListFromLowerCaseString(scenarioIdentifiers);
+        	harness.TagList = DataUtils.getListFromLowerCaseString(tags);
         	
         	HarnessReader.readHarness(Configuration.Connection, harness);
     		

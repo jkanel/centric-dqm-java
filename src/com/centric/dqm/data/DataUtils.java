@@ -257,13 +257,43 @@ public class DataUtils {
 	}
 	
 	
-	public static List<String> getListFromString(String value)
+	public static List<String> getListFromLowerCaseString(String value)
 	{
-		return DataUtils.getListFromString(value,",");
+		if (value==null)
+		{
+			return new ArrayList<String>();
+			
+		} else
+		{
+			return DataUtils.getListFromString(value.toLowerCase(),",", null);
+		}
+		
 	}
 	
-	public static List<String> getListFromString(String value, String delimter)
+	public static List<String> getListFromString(String value)
 	{
+		return DataUtils.getListFromString(value,",", null);
+	}
+	
+	public static List<String> getListFromString(String value, String delimiter)
+	{
+	  return DataUtils.getListFromString(value, delimiter, null);
+	}
+	
+	public static List<String> getListFromString(String value, String delimiter, String removeChars)
+	{
+		
+		// set regex to split on delimiter and whitepsace
+		String delimiterRegex = "\\s*" + delimiter + "+\\s*"; 
+		
+		if (removeChars != null && removeChars.length() > 0)
+		{
+			for(String rc : removeChars.split(""))
+			{
+				value = value.replace(rc,"");
+			}
+		}
+		
 		if(value == null)
 		{
 			// return empty list
@@ -271,14 +301,14 @@ public class DataUtils {
 			
 		} else
 		{
-			
+				
 			if(value.trim().length() == 0 || value.trim().equals("\"\""))
 			{
 				return new ArrayList<String>();
 				
 			} else
-			{			
-				return new ArrayList<String>(Arrays.asList(value.trim().split(delimter)));
+			{
+				return new ArrayList<String>(Arrays.asList(value.trim().split(delimiterRegex)));
 			}
 		}
 	}

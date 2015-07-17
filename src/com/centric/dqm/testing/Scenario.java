@@ -101,6 +101,11 @@ public class Scenario {
 			// run the expected query
 			ers = expectedQuery.execute(expectedConnection, this.modulus, this.modularity);
 			
+			if (ers==null)
+			{
+				throw new IllegalStateException("The expected query was not able to execute.");
+			}
+			
 			// verify expected metadata
 			// the expected query cannot introduce new measure columns
 			this.verifyMetaData(ers.getMetaData(), true);
@@ -136,6 +141,11 @@ public class Scenario {
 			
 			// run the actual query
 			ars = actualQuery.execute(actualConnection, this.modulus, this.modularity);
+			
+			if (ars==null)
+			{
+				throw new IllegalStateException("The actual query was not able to execute.");
+			}
 			
 			// verify actual metadata
 			// the actual query cannot introduce new measure columns
@@ -377,7 +387,7 @@ public class Scenario {
 	{
 		for(Grain g : this.BaseTestCase.Grains)			
 		{
-			if(g.columnName.equals(columnName))
+			if(g.columnName.equalsIgnoreCase(columnName))
 			{
 				return true;
 			}			
@@ -390,7 +400,7 @@ public class Scenario {
 	{
 		for(Grain m : this.BaseTestCase.Grains)			
 		{
-			if(m.columnName.equals(columnName))
+			if(m.columnName.equalsIgnoreCase(columnName))
 			{
 				return m;
 			}			
@@ -405,7 +415,7 @@ public class Scenario {
 	{
 		for(Measure m : this.BaseTestCase.Measures)			
 		{
-			if(m.columnName.equals(columnName))
+			if(m.columnName.equalsIgnoreCase(columnName))
 			{
 				return m;
 			}			
@@ -423,7 +433,7 @@ public class Scenario {
 	{
 		for(Measure m : this.BaseTestCase.Measures)			
 		{
-			if(m.columnName.equals(columnName))
+			if(m.columnName.equalsIgnoreCase(columnName))
 			{
 				return true;
 			}			
@@ -442,7 +452,7 @@ public class Scenario {
 	{
 		for(String t : this.Tags)			
 		{
-			if(t.equals(tag))
+			if(t.equalsIgnoreCase(tag))
 			{
 				return true;
 			}			
@@ -464,7 +474,7 @@ public class Scenario {
 		
 		for(columnIndex = 1; columnIndex <= md.getColumnCount(); columnIndex++)
 		{
-			if(md.getColumnLabel(columnIndex).equals(columnName))
+			if(md.getColumnLabel(columnIndex).equalsIgnoreCase(columnName))
 			{
 				return true;
 			}
@@ -479,7 +489,7 @@ public class Scenario {
 		
 		for(columnIndex = 1; columnIndex <= md.getColumnCount(); columnIndex++)
 		{
-			if(md.getColumnLabel(columnIndex).equals(columnName))
+			if(md.getColumnLabel(columnIndex).equalsIgnoreCase(columnName))
 			{
 				return md.getColumnType(columnIndex);
 			}

@@ -100,11 +100,12 @@ public class HarnessReader {
 			sc.activeFlag = (activeChar == null ? false : activeChar.equals("Y"));
 			
 			
-			sc.Tags = DataUtils.getListFromString(srs.getString("tag_list"));
+			sc.Tags = DataUtils.getListFromLowerCaseString(srs.getString("tag_list"));
 
 			
 			// populate the grains
-			List<String> grainList = DataUtils.getListFromString(srs.getString("grain_list"));
+			// strip out left and right brackets
+			List<String> grainList = DataUtils.getListFromString(srs.getString("grain_list"),",", "[]");
 			
 			for(String columnName:grainList)
 			{

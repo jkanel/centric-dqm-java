@@ -61,7 +61,7 @@ public class Harness {
 			}
 		
 			// include if the identifier is in the list
-			if(ScenarioFilterList.contains(sc.identifier))
+			if(ScenarioFilterList.contains(sc.identifier.toLowerCase()))
 			{
 				// add the scenario to the list
 				matchList.add(sc);

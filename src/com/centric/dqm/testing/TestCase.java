@@ -80,7 +80,7 @@ public class TestCase {
 			
 			for(Grain g: this.Grains)
 			{
-				if(g.columnName.equals(columnName))
+				if(g.columnName.equalsIgnoreCase(columnName))
 				{
 								
 					if(g.internalDataType == (TestCase.INTERNAL_DATA_TYPE_NUMERIC))
@@ -106,7 +106,7 @@ public class TestCase {
 			
 			for(Measure m: this.Measures)
 			{
-				if(m.columnName.equals(columnName))
+				if(m.columnName.equalsIgnoreCase(columnName))
 				{
 					
 				

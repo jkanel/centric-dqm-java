@@ -230,7 +230,7 @@ public class Measure {
 				
 				try
 				{					
-					this._resultVariance = (this.actualValueText.equals(this.expectedValueText)) ? 0.0d : 1.0d;
+					this._resultVariance = (this.actualValueText.equalsIgnoreCase(this.expectedValueText)) ? 0.0d : 1.0d;
 					
 				} catch(NullPointerException e)
 				{
@@ -382,7 +382,7 @@ public class Measure {
 				
 				try
 				{					
-					this._resultVarianceRate = (this.actualValueText.equals(this.expectedValueText)) ? 0.0d : 1.0d;
+					this._resultVarianceRate = (this.actualValueText.equalsIgnoreCase(this.expectedValueText)) ? 0.0d : 1.0d;
 					
 				} catch(NullPointerException e)
 				{
