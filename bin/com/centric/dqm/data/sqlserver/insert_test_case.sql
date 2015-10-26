@@ -49,6 +49,6 @@ VALUES
 , {20}
 , {21}
 , {22}
-, CURRENT_TIMESTAMP
+, {23}
 )
 ;

@@ -1,33 +1,33 @@
-15-07-16 21:19:54.528 - Entering application
-15-07-16 21:19:54.529 - Interpreting command line parameters
-15-07-16 21:19:54.530 - Tags: CAP
-15-07-16 21:19:54.530 - Scenarios: (not specified)
-15-07-16 21:19:54.530 - Checking that management database exists
-15-07-16 21:19:55.028 - Purging test cases prior to 30 days ago
-15-07-16 21:19:55.043 - Importing scenarios...
-15-07-16 21:19:55.044 - Initiating testing harness
-15-07-16 21:19:55.085 - Performing tests
-15-07-16 21:19:55.095 - Testing scenario "CAP_GL1" (f3fb05b9-879a-4ade-a8b9-82c987e799a5).
-15-07-16 21:19:57.073 - Adding "CAP_GL1" metadata "net_amt".
-15-07-16 21:19:57.073 - Adding "CAP_GL1" metadata "income_amt".
-15-07-16 21:19:57.073 - Adding "CAP_GL1" metadata "expense_amt".
-15-07-16 21:19:57.073 - Adding "CAP_GL1" metadata "net_expense_amt".
-15-07-16 21:19:57.074 - Adding "CAP_GL1" metadata "net_revenue_amt".
-15-07-16 21:19:57.074 - Adding "CAP_GL1" metadata "cogs_amt".
-15-07-16 21:19:57.074 - Adding "CAP_GL1" metadata "net_cogs_amt".
-15-07-16 21:19:57.074 - Adding "CAP_GL1" metadata "reimb_expense_income_amt".
-15-07-16 21:19:57.074 - Adding "CAP_GL1" metadata "reimb_expense_cost_amt".
-15-07-16 21:19:57.074 - Adding "CAP_GL1" metadata "employee_cost_amt".
-15-07-16 21:19:57.075 - Adding "CAP_GL1" metadata "contractor_cost_amt".
-15-07-16 21:19:57.075 - Adding "CAP_GL1" metadata "w2t_cost_amt".
-15-07-16 21:19:57.075 - Adding "CAP_GL1" metadata "gross_profit_amt".
-15-07-16 21:19:57.075 - Adding "CAP_GL1" metadata "non_cogs_amt".
-15-07-16 21:19:57.075 - Adding "CAP_GL1" metadata "net_profit_amt".
-15-07-16 21:19:57.075 - Adding "CAP_GL1" metadata "centric_cost_amt".
-15-07-16 21:19:57.076 - Adding "CAP_GL1" metadata "centric_cost_transfer_amt".
-15-07-16 21:19:57.076 - Adding "CAP_GL1" metadata "net_centric_cost_amt".
-15-07-16 21:19:57.076 - Adding "CAP_GL1" metadata "bu_cost_amt".
-15-07-16 21:19:57.076 - Adding "CAP_GL1" metadata "operating_profit_amt".
-15-07-16 21:19:57.076 - Adding "CAP_GL1" metadata "shared_profit_transfer_amt".
-15-07-16 21:20:00.813 - Writing test CAP_GL1 results
-15-07-16 21:20:16.468 - Exiting the application
+15-10-26 11:09:20.976 - Entering application
+15-10-26 11:09:20.986 - Interpreting command line parameters
+15-10-26 11:09:20.986 - Tags: CAP
+15-10-26 11:09:20.986 - Scenarios: (not specified)
+15-10-26 11:09:20.986 - Checking that management database exists
+15-10-26 11:09:21.469 - Purging test cases prior to 30 days ago
+15-10-26 11:09:21.479 - Importing scenarios...
+15-10-26 11:09:21.479 - Initiating testing harness
+15-10-26 11:09:21.519 - Performing tests
+15-10-26 11:09:21.519 - Testing scenario "CAP_GL1" (83c5d9a6-3caf-4670-82d3-eac5329d10fb).
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "net_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "income_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "expense_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "net_expense_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "net_revenue_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "cogs_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "net_cogs_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "reimb_expense_income_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "reimb_expense_cost_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "employee_cost_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "contractor_cost_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "w2t_cost_amt".
+15-10-26 11:09:23.381 - Adding "CAP_GL1" metadata "gross_profit_amt".
+15-10-26 11:09:23.391 - Adding "CAP_GL1" metadata "non_cogs_amt".
+15-10-26 11:09:23.391 - Adding "CAP_GL1" metadata "net_profit_amt".
+15-10-26 11:09:23.391 - Adding "CAP_GL1" metadata "centric_cost_amt".
+15-10-26 11:09:23.391 - Adding "CAP_GL1" metadata "centric_cost_transfer_amt".
+15-10-26 11:09:23.391 - Adding "CAP_GL1" metadata "net_centric_cost_amt".
+15-10-26 11:09:23.391 - Adding "CAP_GL1" metadata "bu_cost_amt".
+15-10-26 11:09:23.391 - Adding "CAP_GL1" metadata "operating_profit_amt".
+15-10-26 11:09:23.391 - Adding "CAP_GL1" metadata "shared_profit_transfer_amt".
+15-10-26 11:09:27.311 - Writing test CAP_GL1 results
+15-10-26 11:09:50.063 - Exiting the application

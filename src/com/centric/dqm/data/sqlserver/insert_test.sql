@@ -1,7 +1,12 @@
 INSERT INTO [dqm].[test] (
   [test_uid]
 , [scenario_uid]
-, [test_dtm]
+, [test_begin_dtm]
+, [test_end_dtm]
+, [expected_exec_begin_dtm]
+, [expected_exec_end_dtm]
+, [actual_exec_begin_dtm]
+, [actual_exec_end_dtm]
 , [modularity]
 , [modulus]
 , [failure_case_ct]
@@ -31,6 +36,11 @@ VALUES
 , {11}
 , {12}
 , {13}
-, CURRENT_TIMESTAMP
+, {14}
+, {15}
+, {16}
+, {17}
+, {18}
+, {19}
 )
 ;

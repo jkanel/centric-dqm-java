@@ -10,9 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.centric.dqm.Application;
-import com.centric.dqm.Configuration;
 import com.centric.dqm.data.DataUtils;
-import com.centric.dqm.data.HarnessReader;
 import com.centric.dqm.data.IConnection;
 
 public class Scenario {
@@ -45,7 +43,15 @@ public class Scenario {
 	public String description;
 	
 	public String testGuid = null;
-	public Date testDate = null;
+	
+	public Date testBeginDate = null;
+	public Date testEndDate = null;
+	
+	public Date actualExecBeginDate = null;
+	public Date actualExecEndDate = null;
+	
+	public Date expectedExecBeginDate = null;
+	public Date expectedExecEndDate = null;
 	
 	public boolean flexibleNullEqualityFlag = false;
 	
@@ -71,9 +77,7 @@ public class Scenario {
 	{
 		
 		// assign the execution time
-		// this.testDate = new Date();
-		
-		this.testDate = HarnessReader.getDate(Configuration.Connection);
+		this.testBeginDate = new Date();
 		
 		// assign a test guid
 		this.testGuid = java.util.UUID.randomUUID().toString();		
@@ -98,8 +102,13 @@ public class Scenario {
 				
 		try {
 			
+			
+			this.expectedExecBeginDate = new Date();
+			
 			// run the expected query
 			ers = expectedQuery.execute(expectedConnection, this.modulus, this.modularity);
+			
+			this.expectedExecEndDate = new Date();
 			
 			if (ers==null)
 			{
@@ -122,7 +131,8 @@ public class Scenario {
 			testFailureFlag = true;
 			
 		} finally
-		{
+		{		
+			
 			// dispose of the resultset
 			DataUtils.disposeResulset(ers);			
 		}
@@ -139,8 +149,12 @@ public class Scenario {
 		
 		try {
 			
+			this.actualExecBeginDate = new Date();
+			
 			// run the actual query
 			ars = actualQuery.execute(actualConnection, this.modulus, this.modularity);
+			
+			this.actualExecEndDate = new Date();
 			
 			if (ars==null)
 			{
@@ -163,10 +177,13 @@ public class Scenario {
 			testFailureFlag = true;
 			
 		} finally
-		{
+		{				
+			
 			// dispose of the resultset
 			DataUtils.disposeResulset(ars);			
 		}
+		
+		this.testEndDate = new Date();
 		
 		return;
 	}

@@ -27,7 +27,7 @@ public class HarnessReader {
 		
 		while(rs.next())
 		{
-			currentDate = rs.getDate("current_dt");
+			currentDate = rs.getTimestamp("current_dt");
 			break;
 		}
 		

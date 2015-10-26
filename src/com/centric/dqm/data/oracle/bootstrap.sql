@@ -68,7 +68,12 @@ CREATE TABLE dqm.connection (
 CREATE TABLE dqm.test (
   test_uid varchar(200) NOT NULL
 , scenario_uid varchar(200) NOT NULL
-, test_dtm datetime default CURRENT_TIMESTAMP
+, test_begin_dtm datetime
+, test_end_dtm datetime
+, expected_exec_begin_dtm datetime
+, expected_exec_end_dtm datetime
+, actual_exec_begin_dtm datetime
+, actual_exec_end_dtm datetime
 , modularity int
 , modulus int
 , failure_case_ct int

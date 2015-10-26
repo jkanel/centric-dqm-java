@@ -238,6 +238,7 @@ public class TestCase {
 	public static String generateHashKey(List<Grain> grains, ResultSet rs) throws SQLException
 	{
 		String key = null;
+		String columnValue = null;
 		
 		for(int n = 0; n < grains.size();  n++)
 		{
@@ -247,7 +248,18 @@ public class TestCase {
 				key = rs.getString(grains.get(n).columnName).trim();
 			} else
 			{
-				key += TestCase.GRAIN_VALUE_DELIMITER + rs.getString(grains.get(n).columnName).trim();
+				
+				columnValue = rs.getString(grains.get(n).columnName);
+				
+				if(columnValue != null)
+				{
+					key += TestCase.GRAIN_VALUE_DELIMITER + columnValue.trim();
+				}
+				else
+				{
+					key += TestCase.GRAIN_VALUE_DELIMITER + "NULL";
+				}
+				
 			}
 			
 		}

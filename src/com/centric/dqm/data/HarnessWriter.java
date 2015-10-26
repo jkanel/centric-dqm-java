@@ -42,8 +42,18 @@ public class HarnessWriter {
 		
 		commandText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.DELETE_TEST_CASE_RESOURCE);
 		
+		
+		/*  COLUMN LIST
+		 
+		  {purge_days}
+		, {current_timestamp}
+		
+		*/
+		
+		
 		Object[] parameters = {				
 				DataUtils.delimitSQLString(String.valueOf(purgeDays)),
+				DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date()))
 		};
 		
 		// apply the values to the command text
@@ -64,8 +74,7 @@ public class HarnessWriter {
 		String parameterizedCommandText;
 		
 		commandText = DataUtils.getScriptResource(con.getJdbcDriver(), DataUtils.INSERT_TEST_RESOURCE);
-	
-	
+		
 		Application.logger.info("Writing test " + sc.identifier + " results");
 		
 		// prepare calculated parameters
@@ -111,21 +120,24 @@ public class HarnessWriter {
 		 
 		  [test_uid]
 		, [scenario_uid]
-		, [test_dtm]
-		
+		, [test_begin_dtm]
+		, [test_end_dtm]
+		, [expected_exec_begin_dtm]
+		, [expected_exec_end_dtm]
+		, [actual_exec_begin_dtm]
+		, [actual_exec_end_dtm]
 		, [modularity]
 		, [modulus]
-		
 		, [failure_case_ct]
 		, [success_case_ct]
-		. [case_failure_rate]
+		, [case_failure_rate]
 		, [allowed_case_failure_rate]
 		, [failure_flag]
-		
 		, [error_flag]
 		, [test_error_message]
 		, [expected_error_message]
 		, [actual_error_message]
+		, [create_dtm]
 	
 		*/
 		
@@ -133,7 +145,16 @@ public class HarnessWriter {
 				
 		  DataUtils.delimitSQLString(sc.testGuid),
 		  DataUtils.delimitSQLString(sc.identifier),
-		  DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(sc.testDate)),
+		  
+		  
+		  (sc.testBeginDate == null) ? "NULL" : DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(sc.testBeginDate)),
+		  (sc.testEndDate == null) ? "NULL" : DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(sc.testEndDate)),
+		  
+		  (sc.expectedExecBeginDate == null) ? "NULL" : DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(sc.expectedExecBeginDate)),
+		  (sc.expectedExecEndDate == null) ? "NULL" : DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(sc.expectedExecEndDate)),
+		  
+		  (sc.actualExecBeginDate == null) ? "NULL" : DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(sc.actualExecBeginDate)),
+		  (sc.actualExecEndDate == null) ? "NULL" : DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(sc.actualExecEndDate)),
 		  
 		  String.valueOf(sc.modularity),
 		  String.valueOf(sc.modulus),
@@ -147,7 +168,8 @@ public class HarnessWriter {
 		  DataUtils.delimitSQLString(errorFlag),
 		  (sc.testException == null) ? "NULL" : DataUtils.delimitSQLString(sc.testException.getMessage()),
 		  (sc.expectedQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(sc.expectedQuery.queryException.getMessage()),
-		  (sc.actualQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(sc.actualQuery.queryException.getMessage())
+		  (sc.actualQuery.queryException == null) ? "NULL" : DataUtils.delimitSQLString(sc.actualQuery.queryException.getMessage()),
+		  DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date()))
 		  
 		};
 		
@@ -276,7 +298,7 @@ public class HarnessWriter {
 			, [grain_04_text]
 			, [grain_05_name]
 			, [grain_05_text]
-			
+			, [create_dtm]
 			*/
 			
 			Object[] parameters = {
@@ -315,6 +337,8 @@ public class HarnessWriter {
 			  
 			  DataUtils.delimitSQLString(grain05Name),
 			  DataUtils.delimitSQLString(grain05Text),
+			  
+			  DataUtils.delimitSQLString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date()))
 			  
 			};
 			
